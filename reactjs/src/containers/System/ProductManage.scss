@@ -1,0 +1,92 @@
+#customers {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #customers td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #customers tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #customers tr:hover {background-color: #ddd;}
+  
+  #customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #04AA6D;
+    color: white;
+  }
+  /* Thêm màu sắc cho các nút */
+/* Thêm khoảng cách giữa các nút */
+button {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    outline: none;
+    margin-right: 10px; /* Khoảng cách giữa các nút */
+
+    /* Nếu nút là nút cuối cùng, bỏ khoảng cách phải */
+    &:last-child {
+        margin-right: 0;
+    }
+
+    /* Màu sắc mặc định cho các nút */
+    &.edit-btn {
+        background-color: #4CAF50; /* Xanh lá cây */
+        color: white;
+    }
+
+    &.delete-btn {
+        background-color: #f44336; /* Đỏ */
+        color: white;
+    }
+
+    &.add-btn {
+        background-color: #007bff; /* Xanh dương */
+        color: white;
+    }
+
+    /* Tạo hiệu ứng hover */
+    &:hover {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+
+    /* Khi nhấn nút */
+    &:active {
+        transform: scale(1);
+    }
+
+    .action-icon {
+        font-size: 18px;
+        margin-right: 8px; /* Khoảng cách giữa biểu tượng và chữ */
+    }
+}
+
+/* Điều chỉnh cho các button cụ thể */
+.edit-btn {
+    &:hover {
+        background-color: #45a049;
+    }
+}
+
+.delete-btn {
+    &:hover {
+        background-color: #e53935;
+    }
+}
+
+.add-btn {
+    &:hover {
+        background-color: #0056b3;
+    }
+}

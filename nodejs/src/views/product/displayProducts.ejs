@@ -1,0 +1,49 @@
+<!-- views/product/displayProducts.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách sản phẩm</title>
+</head>
+<body>
+    <h1>Danh sách sản phẩm</h1>
+    <a href="/create-product">Thêm sản phẩm mới</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên sản phẩm</th>
+                <th>Danh mục</th>
+                <th>Mô tả</th>
+                <th>Hình ảnh</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% products.forEach(product => { %>
+                <tr>
+                    <td><%= product.id %></td>
+                    <td><%= product.name %></td>
+                    <td><%= product.category ? product.category.name : 'Chưa có' %></td>
+                    <td><%= product.description %></td>
+                    <td> 
+                        <img src="<%= product.image %>" alt="<%= product.name %>" width="100" />
+                    </td>
+                    
+                    <td><%= product.price %> VND</td>
+                    <td><%= product.quantity %></td>
+                    <td>
+                        <a href="/edit-product?id=<%= product.id %>">Chỉnh sửa</a>
+                        <form action="/delete-product" method="POST" style="display:inline;">
+                            <input type="hidden" name="id" value="<%= product.id %>">
+                            <button type="submit">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>
