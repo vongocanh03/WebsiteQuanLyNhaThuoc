@@ -4,7 +4,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import UserManage from '../containers/System/UserManage';
 import ProductManage from '../containers/System/ProductManage';
 import RegisterPackageGroupOrAcc from '../containers/System/RegisterPackageGroupOrAcc';
-import UserDashboard from '../components/UserDashboard';
+
 
 class System extends Component {
     render() {
@@ -15,7 +15,7 @@ class System extends Component {
                     <Switch>
                         <Route path="/system/user-manage" component={UserManage} />
                         <Route path="/system/product-manage" component={ProductManage} />
-                        <Route path="/dashboard/user" component={<UserDashboard />} />
+                    
 
                         <Route path="/system/register-package-group-or-account" component={RegisterPackageGroupOrAcc} />
                         <Route component={() => { return (<Redirect to={systemMenuPath} />) }} />

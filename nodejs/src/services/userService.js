@@ -120,7 +120,7 @@ let createNewUser = (data) => {
             if (!data.password) { // Kiểm tra password trước khi hash
                 resolve({
                     errCode: 2,
-                    message: 'Missing password'
+                    errMessage: 'Missing password'
                 });
                 return;
             }
@@ -129,7 +129,7 @@ let createNewUser = (data) => {
             if (check === true) {
                 resolve({
                     errCode: 1,
-                    message: 'Your email is already used'
+                    errMessage: 'Your email is already used'
                 });
             } else {
                 let hashPassWordFromBcrypt = await hashUserPassword(data.password);
@@ -195,15 +195,13 @@ let editUser = (data) => {
                 user.firstName = data.firstName;
                 user.lastName = data.lastName;
                 user.address = data.address;
-                user.phonenumber = data.phonenumber;
-                user.gender = data.gender;
-                user.roleId = data.roleId;
+             
 
                 await user.save(); // lưu các thay đổi vào DB
 
                 resolve({
                     errCode: 0,
-                    message: 'The user has been updated successfully'
+                    errMessage: 'The user has been updated successfully'
                 });
             }
         } catch (e) {

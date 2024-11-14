@@ -32,7 +32,9 @@ let initWebRoutes = (app) => {
     router.post('/update-product', productController.updateProduct);
     router.post('/delete-product', productController.deleteProduct);
 
+    
     router.post('/  ', userController.handleLogin);
+    router.post('/api/login', userController.handleLogin);
     router.get('/api/get-all-users', userController.handleGetAllUsers);
     router.get('/api/products', productController.getAllProducts);
     router.post('/api/create-new-user', userController.handleCreateNewUser);

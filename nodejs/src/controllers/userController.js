@@ -12,7 +12,7 @@ let handleLogin = async (req, res) => {
         })
     }
 
-    let userData = await userService.handleUserLogin(email, password)
+    let userData = await userService.handleUserLogin(email, password);
     //check email exist
     //password nhap vao ko dung
     //return userInfor
