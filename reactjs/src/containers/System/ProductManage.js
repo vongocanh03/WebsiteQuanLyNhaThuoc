@@ -1,107 +1,180 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
+import { getAllProducts, createNewProductService, deleteProductService, updateProductService } from '../../services/productService';
 import './ProductManage.scss';
-import { Redirect } from 'react-router-dom';
-import { FaTrash, FaEdit, FaPlus } from 'react-icons/fa'; class ProductManage extends Component {
-    state = {
-        products: [],
-        shouldRedirect: false,
-        error: null // Thêm trạng thái lỗi
-    };
+import ModalProduct from './ModalProduct';
+import { emitter } from '../../utils/emitter';
+import ModalEditProduct from './ModalEditProduct';
 
-    componentDidMount() {
-        this.fetchProducts();
+class ProductManage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            arrProducts: [],
+            isOpenModalProduct: false,
+            isOpenModalEditProduct: false,
+            productEdit: {}
+        };
     }
 
-    fetchProducts = async () => {
+    async componentDidMount() {
+        await this.getAllProductsFromReact();
+    }
+
+    getAllProductsFromReact = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/products');
-            console.log('Dữ liệu nhận được:', response.data); // Kiểm tra dữ liệu trả về từ API
-            this.setState({ products: response.data.products });
+            const response = await getAllProducts();
+            console.log('Phản hồi API:', response); // Kiểm tra phản hồi API
+            if (response && response.products) {
+                this.setState({ arrProducts: response.products });
+            } else {
+                console.error('Dữ liệu sản phẩm không hợp lệ');
+            }
         } catch (error) {
-            console.error('Error fetching products:', error);
-            this.setState({ error: 'Không thể tải dữ liệu sản phẩm' });
+            console.error('Lỗi khi lấy sản phẩm:', error);
         }
     };
 
-    handleDeleteProduct = async (productId) => {
+    handleAddNewProduct = () => {
+        this.setState({
+            isOpenModalProduct: true
+        });
+    };
+
+    toggleProductModal = () => {
+        this.setState({
+            isOpenModalProduct: !this.state.isOpenModalProduct
+        });
+    };
+
+    toggleProductEditModal = () => {
+        this.setState({
+            isOpenModalEditProduct: !this.state.isOpenModalEditProduct
+        });
+    };
+
+    createNewProduct = async (data) => {
         try {
-            await axios.delete(`http://localhost:8080/api/products/${productId}`);
-            this.fetchProducts(); // Tải lại danh sách sản phẩm sau khi xóa
-        } catch (error) {
-            console.error('Error deleting product:', error);
-            this.setState({ error: 'Không thể xóa sản phẩm' });
+            let response = await createNewProductService(data);
+            if (response && response.errCode !== 0) {
+                alert(response.errMessage);
+            } else {
+                await this.getAllProductsFromReact();
+                this.setState({
+                    isOpenModalProduct: false
+                });
+                emitter.emit('EVENT_CLEAR_MODAL_DATA');
+            }
+        } catch (e) {
+            console.log(e);
         }
     };
 
-    handleEditProduct = (productId) => {
-        console.log(`Edit product with ID: ${productId}`);
+    handleDeleteProduct = async (product) => {
+        try {
+            let res = await deleteProductService(product.id);
+            if (res && res.errCode === 0) {
+                await this.getAllProductsFromReact();
+            } else {
+                alert(res.errMessage);
+            }
+        } catch (e) {
+            console.log(e);
+        }
     };
 
-    handleAddProduct = () => {
-        console.log('Navigate to add product page');
+    handleEditProduct = (product) => {
+        this.setState({
+            isOpenModalEditProduct: true,
+            productEdit: product
+        });
+    };
+
+    doEditProduct = async (product) => {
+        try {
+            let res = await updateProductService(product);
+            if (res && res.errCode === 0) {
+                this.setState({
+                    isOpenModalEditProduct: false
+                });
+                await this.getAllProductsFromReact();
+            } else {
+                alert(res.errMessage);
+            }
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     render() {
-        const { products, shouldRedirect, error } = this.state;
-
-        if (shouldRedirect) {
-            return <Redirect to="/new-page" />;
-        }
+        let { arrProducts } = this.state;
 
         return (
-            <div className="product-container">
+            <div className="products-container">
+                <ModalProduct
+                    isOpen={this.state.isOpenModalProduct}
+                    toggleFromParent={this.toggleProductModal}
+                    createNewProduct={this.createNewProduct}
+                />
+
+                {this.state.isOpenModalEditProduct &&
+                    <ModalEditProduct
+                        isOpen={this.state.isOpenModalEditProduct}
+                        toggleFromParent={this.toggleProductEditModal}
+                        currentProduct={this.state.productEdit}
+                        editProduct={this.doEditProduct}
+                    />
+                }
+
                 <div className="title text-center">Manage Products</div>
-                <div className="product-table mt-3 mx-1">
-                    {error && <div className="error-message">{error}</div>} {/* Hiển thị thông báo lỗi nếu có */}
+                <div className='mx-1'>
+                    <button
+                        className='btn btn-primary px-3'
+                        onClick={this.handleAddNewProduct}
+                    >
+                        <i className='fas fa-plus'></i> Add new product
+                    </button>
+                </div>
+                <div className="products-table mt-3 mx-1">
                     <table id="customers">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Image</th>
                                 <th>Name</th>
                                 <th>Price</th>
-                                <th>Quantity</th>
                                 <th>Category</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {products.map((product) => (
-                                <tr key={product.id}>
-                                    <td>{product.id}</td>
+                            {arrProducts && arrProducts.length > 0 ? arrProducts.map((item, index) => (
+                                <tr key={index}>
                                     <td>
-                                        {product.image && (
+                                        {item.image && (
                                             <img
-                                                src={`http://localhost:8080${product.image}`}
-                                                alt={product.name}
+                                                src={`http://localhost:8080${item.image}`}
+                                                alt={item.name}
                                                 style={{ width: '50px', height: '50px', objectFit: 'cover' }}
                                             />
                                         )}
-
                                     </td>
-                                    <td>{product.name}</td>
-                                    <td>{product.price} VND</td>
-                                    <td>{product.quantity}</td>
-                                    <td>{product.category ? product.category.name : 'N/A'}</td>
+                                    <td>{item.name}</td>
+                                    <td>{item.price}</td>
+                                    <td>{item.category ? item.category.name : 'N/A'}</td>
                                     <td>
-                                        <button onClick={() => this.handleEditProduct(product.id)} className="edit-btn">
-                                            <FaEdit className="action-icon" />
-                                            
+                                        <button className='btn-edit' onClick={() => this.handleEditProduct(item)}>
+                                            <i className="fas fa-pencil-alt"></i>
                                         </button>
-                                        <button onClick={() => this.handleDeleteProduct(product.id)} className="delete-btn">
-                                            <FaTrash className="action-icon" />
-                                            
-                                        </button>
-                                        <button onClick={this.handleAddProduct} className="add-btn">
-                                            <FaPlus className="action-icon" />
-                            
+                                        <button className='btn-delete' onClick={() => this.handleDeleteProduct(item)}>
+                                            <i className="fa fa-trash"></i>
                                         </button>
                                     </td>
-
                                 </tr>
-                            ))}
+                            )) : (
+                                <tr>
+                                    <td colSpan="5" className="text-center">No products found</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
@@ -110,11 +183,11 @@ import { FaTrash, FaEdit, FaPlus } from 'react-icons/fa'; class ProductManage ex
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {};
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return {};
 };
 
