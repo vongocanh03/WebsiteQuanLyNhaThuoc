@@ -55,21 +55,25 @@ class ProductManage extends Component {
 
     createNewProduct = async (data) => {
         try {
-            let response = await createNewProductService(data);
-            if (response && response.errCode !== 0) {
-                alert(response.errMessage);
-            } else {
-                await this.getAllProductsFromReact();
+            let response = await createNewProductService(data); // Gọi API lưu sản phẩm
+            console.log('API response:', response); // Thêm log để kiểm tra phản hồi
+
+            if (response && response.errCode === 0) {
+                await this.getAllProductsFromReact(); // Làm mới danh sách sản phẩm
                 this.setState({
-                    isOpenModalProduct: false
+                    isOpenModalProduct: false, // Đóng modal
                 });
-                emitter.emit('EVENT_CLEAR_MODAL_DATA');
+                emitter.emit('EVENT_CLEAR_MODAL_DATA'); // Xóa dữ liệu trong modal
+                alert('Product added successfully!');
+            } else {
+                alert(response.errMessage || 'Failed to add product.');
             }
         } catch (e) {
-            console.log(e);
+            console.error('Error creating product:', e);
+            alert('An error occurred. Please try again later.');
         }
     };
-
+    
     handleDeleteProduct = async (product) => {
         try {
             let res = await deleteProductService(product.id);

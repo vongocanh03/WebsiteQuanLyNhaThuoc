@@ -23,13 +23,24 @@ class CategoryManage extends Component {
     }
 
     getAllCategoriesFromReact = async () => {
-        let response = await getAllCategories();
-        if (response && response.errCode === 0) {
-            this.setState({
-                arrCategories: response.categories
-            });
+        try {
+            let response = await getAllCategories();
+            console.log('API Response:', response); // Kiểm tra phản hồi API trong console
+    
+            // Đảm bảo response chứa categories
+            if (response && response.categories) {
+                this.setState({
+                    arrCategories: response.categories,
+                });
+            } else {
+                console.error('Failed to fetch categories: Invalid response format');
+            }
+        } catch (error) {
+            console.error('Error fetching categories:', error); // Log lỗi nếu xảy ra vấn đề
         }
-    }
+    };
+    
+    
 
     handleAddNewCategory = () => {
         this.setState({
@@ -55,16 +66,18 @@ class CategoryManage extends Component {
             if (response && response.errCode !== 0) {
                 alert(response.errMessage);
             } else {
+                // Sau khi thêm thể loại thành công, gọi lại hàm để lấy tất cả thể loại
                 await this.getAllCategoriesFromReact();
                 this.setState({
                     isOpenModalCategory: false
                 });
-                emitter.emit('EVENT_CLEAR_MODAL_DATA');
+                emitter.emit('EVENT_CLEAR_MODAL_DATA'); // Để làm sạch dữ liệu trong modal
             }
         } catch (e) {
             console.log(e);
         }
     }
+    
 
     handleDeleteCategory = async (category) => {
         try {
@@ -104,6 +117,7 @@ class CategoryManage extends Component {
 
     render() {
         let arrCategories = this.state.arrCategories || []; // Đảm bảo arrCategories là một mảng nếu chưa được khởi tạo
+        console.log('Render categories:', arrCategories); // Kiểm tra dữ liệu trong render
 
         return (
             <div className="categories-container">

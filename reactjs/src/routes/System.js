@@ -13,11 +13,12 @@ class System extends Component {
             <div className="system-container">
                 <div className="system-list">
                     <Switch>
-                        <Route path="/system/user-manage" component={UserManage} />
+=                        <Route path="/system/user-manage" component={UserManage} />
                         <Route path="/system/product-manage" component={ProductManage} />
 
                         <Route path="/system/category-manage" component={CategoryManage} />
                         <Route component={() => { return (<Redirect to={systemMenuPath} />) }} />
+                        
                     </Switch>
                 </div>
             </div>

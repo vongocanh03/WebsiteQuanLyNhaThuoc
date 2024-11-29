@@ -48,10 +48,22 @@ class ModalCategory extends Component {
 
     handleAddNewCategory = () => {
         let isValid = this.checkValideInput();
-        if (isValid === true) {
-            this.props.createNewCategory(this.state); // Gọi hàm tạo thể loại mới từ props
+        if (isValid) {
+            const categoryData = {
+                name: this.state.name
+            };
+            this.props.createNewCategory(categoryData)
+                .then(() => {
+                    // Sau khi thêm thành công, gọi hàm để tải lại dữ liệu từ API hoặc cập nhật state.
+                    this.props.loadCategories();  // Đây là một ví dụ, thay bằng action đúng của bạn
+                    this.toggle();  // Đóng modal
+                })
+                .catch(err => {
+                    console.error("Error adding category:", err);
+                });
         }
     }
+    
 
     render() {
         return (
