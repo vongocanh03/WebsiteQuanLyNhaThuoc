@@ -35,6 +35,10 @@ let initWebRoutes = (app) => {
     router.get('/create-product', productController.handleCreateProductPage); // Hiển thị trang tạo sản phẩm
     router.post('/create-product', productController.handleCreateProduct);
     router.get('/edit-product', productController.handleGetEditProductPage); // Hiển thị trang chỉnh sửa sản phẩm
+    router.post('/update-product', productController.handleUpdateProduct); 
+    router.post('/delete-product', productController.handleDeleteProduct);
+    
+
 
     router.post('/  ', userController.handleLogin);
     router.post('/api/login', userController.handleLogin);
