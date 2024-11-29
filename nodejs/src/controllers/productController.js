@@ -45,10 +45,13 @@ let handleCreateProductPage = async (req, res) => {
 
 let handleCreateProduct = async (req, res) => {
     try {
+        
         let productData = req.body;
         if (req.file) {
             productData.image = `/uploads/${req.file.filename}`;
         }
+        console.log('data:', productData);
+
         let createdProduct = await CRUDServiceProduct.createNewProduct(productData);
         if (createdProduct) {
             return res.redirect('/get-allproducts');

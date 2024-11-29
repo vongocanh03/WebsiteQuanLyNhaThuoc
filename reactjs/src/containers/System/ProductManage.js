@@ -57,6 +57,7 @@ class ProductManage extends Component {
         try {
             let response = await createNewProductService(data); // Gọi API lưu sản phẩm
             console.log('API response:', response); // Thêm log để kiểm tra phản hồi
+            console.log('Product Data:', data);
 
             if (response && response.errCode === 0) {
                 await this.getAllProductsFromReact(); // Làm mới danh sách sản phẩm

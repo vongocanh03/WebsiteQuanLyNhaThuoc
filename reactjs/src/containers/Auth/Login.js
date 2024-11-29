@@ -39,31 +39,31 @@ class Login extends Component {
     handleLogin = async () => {
         this.setState({
             errMessage: ''
-        })
+        });
         try {
-
             let data = await handleLoginApi(this.state.username, this.state.password);
             if (data && data.errCode !== 0) {
                 this.setState({
                     errMessage: data.message
-                })
+                });
             }
             if (data && data.errCode === 0) {
                 this.props.userLoginSuccess(data.user);
-                console.log('loging success');
+                console.log('Login success');
+                // Chuyển hướng đến HomePage
+                this.props.navigate('/home');
             }
-
         } catch (e) {
-            if (e.response) {
-                if (e.response.data) {
-                    this.setState({
-                        errMessage: e.response.data.message
-                    })
-                }
+            if (e.response && e.response.data) {
+                this.setState({
+                    errMessage: e.response.data.message
+                });
             }
             console.log('error message', e.response);
         }
-    }
+    };
+    
+    
 
     handleShowHidePassword = () => {
 
