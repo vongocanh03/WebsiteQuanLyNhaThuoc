@@ -54,11 +54,11 @@ class ProductManage extends Component {
     };
 
     createNewProduct = async (data) => {
+        console.log('Sending data to create product:', data); // Log dữ liệu gửi đi
         try {
-            let response = await createNewProductService(data); // Gọi API lưu sản phẩm
-            console.log('API response:', response); // Thêm log để kiểm tra phản hồi
-            console.log('Product Data:', data);
-
+            let response = await createNewProductService(data); // Gọi API tạo sản phẩm
+            console.log('API Response:', response); // Log toàn bộ phản hồi từ API
+    
             if (response && response.errCode === 0) {
                 await this.getAllProductsFromReact(); // Làm mới danh sách sản phẩm
                 this.setState({
@@ -67,13 +67,16 @@ class ProductManage extends Component {
                 emitter.emit('EVENT_CLEAR_MODAL_DATA'); // Xóa dữ liệu trong modal
                 alert('Product added successfully!');
             } else {
+                console.error('Error response:', response); // Log lỗi phản hồi từ API
                 alert(response.errMessage || 'Failed to add product.');
             }
         } catch (e) {
-            console.error('Error creating product:', e);
+            console.error('Error creating product:', e); // Log lỗi nếu gặp phải
             alert('An error occurred. Please try again later.');
         }
     };
+    
+    
     
     handleDeleteProduct = async (product) => {
         try {
