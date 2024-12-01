@@ -1,29 +1,41 @@
-<table>
-  <thead>
-      <tr>
-          <th>ID</th>
-          <th>Tên thể loại</th>
-          <th>Actions</th>
-      </tr>
-  </thead>
-  <tbody>
-      <% categories.forEach((category) => { %>
-          <tr>
-              <td><%= category.id %></td>
-              <td><%= category.name %></td>
-              <td>
-                <a href="/categories/edit?id=<%= category.id %>">Sửa</a> |
-                <form action="/categories/delete" method="POST" style="display:inline;">
-                    <input type="hidden" name="id" value="<%= category.id %>">
-                    <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa không?');">Xóa</button>
-                </form>
-              </td>
-          </tr>
-      <% }) %>
-  </tbody>
-</table>
-
-<!-- Nút Thêm Mới -->
-<div style="margin-top: 20px;">
-    <a href="/categories/create" class="btn btn-primary">Thêm Mới</a>
-</div>
+<!-- views/category/displayCategories.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh Sách Danh Mục</title>
+</head>
+<body>
+    <h1>Danh Sách Danh Mục</h1>
+    <!-- Nút Thêm Danh Mục -->
+    <a href="/category/create" style="margin-bottom: 20px; display: inline-block;">Thêm Danh Mục Mới</a>
+    <br>
+    <table border="1" cellspacing="0" cellpadding="5">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên Danh Mục</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% categories.forEach(category => { %>
+                <tr>
+                    <td><%= category.id %></td>
+                    <td><%= category.name %></td>
+                    <td>
+                        <!-- Nút Sửa -->
+                        <a href="/category/edit?id=<%= category.id %>">Sửa</a> | 
+                        
+                        <!-- Form Xóa -->
+                        <form action="/category/delete" method="POST" style="display:inline;">
+                            <input type="hidden" name="id" value="<%= category.id %>">
+                            <button type="submit" onclick="return confirm('Bạn chắc chắn muốn xóa?')">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>
