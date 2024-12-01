@@ -5,21 +5,25 @@ import logo from '../../assets/logo.png'
 import { FormattedMessage } from 'react-intl'
 import { languages, LANGUAGES } from '../../utils'
 import { changeLanguageApp } from '../../store/actions'
+import * as actions from "../../store/actions";
+
 class HomeHeader extends Component {
     changeLanguage = (language) => {
         this.props.changeLanguageAppRedux(language)
     }
 
     render() {
-        let language = this.props.language;
-        console.log('check language: ', language)
+        let { language, userInfo, processLogout } = this.props;
+
+        console.log('Redux State in HomeHeader:', this.props.userInfo);
+
         return (
             <React.Fragment>
                 <div className='home-header-container'>
                     <div className="home-header-content">
                         <div className="left-content">
                             <i className="fas fa-bars"></i>
-                            <img className="header-logo" src={logo} />
+                            <img className="header-logo" src={logo} alt="Logo" />
                         </div>
                         <div className="center-content">
                             <div className="child-content">
@@ -54,10 +58,16 @@ class HomeHeader extends Component {
                                     <FormattedMessage id="homeheader.check-health" />
                                 </div>
                             </div>
-
                         </div>
                         <div className="right-content">
-                            <div className='support'><i className='fas fa-question-circle'></i>
+
+                            <div className="welcome-message">
+                                <FormattedMessage id='homeheader.welcome' />
+                                {userInfo && userInfo.email ? userInfo.email : ''}!
+                            </div>
+
+                            <div className='support'>
+                                <i className='fas fa-question-circle'></i>
                                 <FormattedMessage id='homeheader.support' />
                             </div>
                             <div
@@ -68,45 +78,49 @@ class HomeHeader extends Component {
                                 className={language === LANGUAGES.EN ? 'language-en active' : 'language-en'}>
                                 <span onClick={() => this.changeLanguage(LANGUAGES.EN)}>EN</span>
                             </div>
-
+                            <div className="btn btn-logout" onClick={processLogout}>
+                            <i className="fas fa-sign-out-alt"></i>
                         </div>
+                        </div>
+                       
                     </div>
                 </div>
-                <div class="home-header-banner">
-                    <div class="content-up">
-                        <div class="title1"><FormattedMessage id='banner.title1' /></div>
-                        <div class="title2"><FormattedMessage id='banner.title2' /></div>
-                        <div class="search">
-                            <i class="fas fa-search"></i> <input type="text" placeholder="Tìm chuyên khoa khám bệnh" />
+                <div className="home-header-banner">
+                    <div className="content-up">
+                        <div className="title1"><FormattedMessage id='banner.title1' /></div>
+                        <div className="title2"><FormattedMessage id='banner.title2' /></div>
+                        <div className="search">
+                            <i className="fas fa-search"></i>
+                            <input type="text" placeholder="Tìm chuyên khoa khám bệnh" />
                         </div>
                     </div>
+                    <div className="content-down">
+                        <div className="options">
+                            <div className="option-child">
+                                <div className="icon-child"><i className="far fa-hospital"></i></div>
+                                <div className="text-child"><FormattedMessage id='banner.child1' /></div>
+                            </div>
+                            <div className="option-child">
+                                <div className="icon-child"><i className="fas fa-mobile-alt"></i></div>
+                                <div className="text-child"><FormattedMessage id='banner.child2' /></div>
+                            </div>
+                            <div className="option-child">
+                                <div className="icon-child"><i className="fas fa-procedures"></i></div>
+                                <div className="text-child"><FormattedMessage id='banner.child3' /></div>
+                            </div>
+                            <div className="option-child">
+                                <div className="icon-child"><i className="fas fa-flask"></i></div>
+                                <div className="text-child"><FormattedMessage id='banner.child4' /></div>
+                            </div>
+                            <div className="option-child">
+                                <div className="icon-child"><i className="fas fa-user-md"></i></div>
+                                <div className="text-child"><FormattedMessage id='banner.child5' /></div>
+                            </div>
+                            <div className="option-child">
+                                <div className="icon-child"><i className="fas fa-briefcase-medical"></i></div>
+                                <div className="text-child"><FormattedMessage id='banner.child6' /></div>
+                            </div>
 
-                    <div class="content-down">
-                        <div class="options">
-                            <div class="option-child">
-                                <div class="icon-child"><i class="far fa-hospital"></i></div>
-                                <div class="text-child"><FormattedMessage id='banner.child1' /></div>
-                            </div>
-                            <div class="option-child">
-                                <div class="icon-child"><i class="fas fa-mobile-alt"></i></div>
-                                <div class="text-child"><FormattedMessage id='banner.child2' /></div>
-                            </div>
-                            <div class="option-child">
-                                <div class="icon-child"><i class="fas fa-procedures"></i></div>
-                                <div class="text-child"><FormattedMessage id='banner.child3' /></div>
-                            </div>
-                            <div class="option-child">
-                                <div class="icon-child"><i class="fas fa-flask"></i></div>
-                                <div class="text-child"><FormattedMessage id='banner.child4' /></div>
-                            </div>
-                            <div class="option-child">
-                                <div class="icon-child"><i class="fas fa-user-md"></i></div>
-                                <div class="text-child"><FormattedMessage id='banner.child5' /></div>
-                            </div>
-                            <div class="option-child">
-                                <div class="icon-child"><i className="fas fa-briefcase-medical"></i></div>
-                                <div class="text-child"><FormattedMessage id='banner.child6' /></div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -114,17 +128,21 @@ class HomeHeader extends Component {
         );
     }
 
+
 }
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.user.isLoggedIn
+        isLoggedIn: state.user.isLoggedIn,
+        isLoggedIn: state.user.isLoggedIn, // Lấy trạng thái đăng nhập
+        userInfo: state.user.userInfo,      // Lấy thông tin người dùng
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        changeLanguageAppRedux: (language)=> dispatch(changeLanguageApp(language))
+        processLogout: () => dispatch(actions.processLogout()),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

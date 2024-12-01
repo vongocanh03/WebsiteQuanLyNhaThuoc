@@ -42,6 +42,8 @@ class Login extends Component {
         });
         try {
             let data = await handleLoginApi(this.state.username, this.state.password);
+            console.log('aa:', data); // Kiểm tra dữ liệu trả về
+
             if (data && data.errCode !== 0) {
                 this.setState({
                     errMessage: data.message
@@ -49,9 +51,20 @@ class Login extends Component {
             }
             if (data && data.errCode === 0) {
                 this.props.userLoginSuccess(data.user);
-                console.log('Login success');
-                // Chuyển hướng đến HomePage
-                this.props.navigate('/home');
+                console.log('User info:', data.user);
+
+                // Kiểm tra roleId và điều hướng
+                const { roleId } = data.user;
+                if (parseInt(roleId) === 1) {
+                    this.props.navigate('/home');
+                } else if (parseInt(roleId) === 2 || parseInt(roleId) === 3) {
+                    this.props.navigate('/system/user-manage');
+                } else {
+                    this.setState({
+                        errMessage: 'Không xác định được quyền truy cập!'
+                    });
+                }
+
             }
         } catch (e) {
             if (e.response && e.response.data) {
@@ -62,8 +75,8 @@ class Login extends Component {
             console.log('error message', e.response);
         }
     };
-    
-    
+
+
 
     handleShowHidePassword = () => {
 
@@ -72,12 +85,13 @@ class Login extends Component {
         })
         console.log(this.state.showPassword);
     }
-
+    handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            this.handleLogin();
+        }
+    }
 
     render() {
-
-
-
         return (
             <div className="login-background">
                 <div className="login-container">
@@ -91,9 +105,8 @@ class Login extends Component {
                                 placeholder="Enter your user name"
                                 value={this.state.username}
                                 onChange={(e) => this.handleOnChangeUserName(e)}
-
+                                onKeyDown={this.handleKeyPress} // Thêm sự kiện onKeyDown
                             />
-
                         </div>
                         <div className="col-12 form-group">
                             <label>Password: </label>
@@ -104,7 +117,7 @@ class Login extends Component {
                                     placeholder="Enter your password"
                                     value={this.state.password}
                                     onChange={(e) => this.handleOnChangePassword(e)}
-
+                                    onKeyDown={this.handleKeyPress} // Thêm sự kiện onKeyDown
                                 />
                                 <span onClick={() => this.handleShowHidePassword()}>
                                     <i className={this.state.showPassword ? 'fas fa-eye show-password' : 'fas fa-eye-slash show-password'} ></i>
@@ -133,7 +146,7 @@ class Login extends Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 
