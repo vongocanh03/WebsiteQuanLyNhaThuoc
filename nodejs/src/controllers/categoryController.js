@@ -1,3 +1,4 @@
+// controllers/categoryController.js
 import CRUDServiceCategory from '../services/CRUDServiceCategory';
 
 let handleGetAllCategories = async (req, res) => {
@@ -16,10 +17,10 @@ let handleGetAllCategories = async (req, res) => {
 let handleCreateCategory = async (req, res) => {
     try {
         let categoryData = req.body;
-        
-        // Kiểm tra xem tên thể loại đã tồn tại chưa
+
         if (!categoryData.name || categoryData.name.trim() === '') {
-            return res.status(400).json({ message: 'Category name is required' });
+            // Render lại form với thông báo lỗi
+            return res.render('category/createCategory', { message: 'Tên danh mục là bắt buộc' });
         }
 
         // Xử lý loại bỏ khoảng trắng thừa
@@ -31,31 +32,29 @@ let handleCreateCategory = async (req, res) => {
             return res.status(400).json({ message: 'Category name already exists' });
         }
 
+        // Gọi service để tạo danh mục mới
         let createdCategory = await CRUDServiceCategory.createNewCategory(categoryData);
-        return res.status(201).json({
-            message: 'Category created successfully',
-            category: createdCategory
-        });
+
+        // Redirect về danh sách danh mục sau khi thành công
+        return res.redirect('/category');
     } catch (error) {
         console.log('Error creating category:', error);
+        if (error.message === 'Category already exists') {
+            return res.status(400).json({ message: 'Category already exists' });
+        }
         return res.status(500).json({ message: 'Error creating category', error: error.message });
     }
 };
 
+
 let handleUpdateCategory = async (req, res) => {
     try {
         let categoryData = req.body;
-
-        // Kiểm tra đầu vào
         if (!categoryData.id) {
             return res.status(400).json({ message: 'Category ID is required' });
         }
-
         let updatedCategory = await CRUDServiceCategory.updateCategory(categoryData);
-        return res.status(200).json({
-            message: 'Category updated successfully',
-            category: updatedCategory
-        });
+        return res.redirect('/category'); // Điều hướng về trang danh sách danh mục
     } catch (error) {
         console.log('Error updating category:', error);
         return res.status(500).json({ message: 'Error updating category', error: error.message });
@@ -65,16 +64,12 @@ let handleUpdateCategory = async (req, res) => {
 let handleDeleteCategory = async (req, res) => {
     try {
         let categoryId = req.body.id;
-
         if (!categoryId) {
             return res.status(400).json({ message: 'Category ID is required' });
         }
-
         let deleted = await CRUDServiceCategory.deleteCategoryById(categoryId);
         if (deleted) {
-            return res.status(200).json({
-                message: 'Category deleted successfully'
-            });
+            return res.redirect('/category'); // Điều hướng về trang danh sách danh mục
         } else {
             return res.status(400).json({ message: 'Unable to delete category' });
         }
@@ -84,6 +79,8 @@ let handleDeleteCategory = async (req, res) => {
     }
 };
 
+// controllers/categoryController.js
+
 let handleGetAllCategoriesPage = async (req, res) => {
     try {
         let categories = await CRUDServiceCategory.getAllCategories();
@@ -91,36 +88,20 @@ let handleGetAllCategoriesPage = async (req, res) => {
             categories: categories
         });
     } catch (error) {
-        console.log('Error fetching categories for page:', error);
-        return res.status(500).json({ message: 'Error fetching categories for page', error: error.message });
+        console.log('Error fetching categories:', error);
+        return res.status(500).json({ message: 'Error fetching categories', error: error.message });
     }
 };
 
-let getEditCategoryPage = async (req, res) => {
-    try {
-        const categoryId = req.params.id; // Lấy ID từ URL
-        
-        // Lấy thể loại theo ID
-        const category = await CRUDServiceCategory.getCategoryById(categoryId);
-        
-        // Truyền dữ liệu thể loại vào view
-        if (!category) {
-            return res.status(404).json({ message: 'Category not found' });
-        }
 
-        return res.render('category/editCategory', {
-            category: category
-        });
-    } catch (error) {
-        console.log('Error fetching category for edit:', error);
-        return res.status(500).json({ message: 'Error fetching category for edit', error: error.message });
-    }
+let getEditCategoryPage = (req, res) => {
+    return res.render('categories/editCategory');
 };
-
 
 let createCategoryPage = (req, res) => {
-    return res.render('category/createCategory');
+    return res.render('categories/createCategory');
 };
+
 
 module.exports= {
     handleGetAllCategories:handleGetAllCategories,
