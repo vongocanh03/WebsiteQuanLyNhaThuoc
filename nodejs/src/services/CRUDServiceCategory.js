@@ -76,11 +76,23 @@ const deleteCategoryById = async (categoryId) => {
         throw error;
     }
 };
-
+// Lấy thể loại theo tên
+const getCategoryByName = async (name) => {
+    try {
+        const category = await db.Category.findOne({
+            where: { name: name }
+        });
+        return category;
+    } catch (error) {
+        console.error('Error fetching category by name:', error);
+        throw error;
+    }
+};
 export default {
     createNewCategory,
     getAllCategories,
     getCategoryById,
     updateCategory,
     deleteCategoryById,
+    getCategoryByName,
 };

@@ -19,7 +19,7 @@ let initWebRoutes = (app) => {
 
     router.get('/categories/create', categoryController.createCategoryPage); // Trang tạo category
     router.post('/post-create', categoryController.handleCreateCategory); // Tạo category (dùng chung với API)
-    router.get('/categories/edit', categoryController.getEditCategoryPage); // Trang chỉnh sửa category
+    router.get('/categories/edit/:id', categoryController.getEditCategoryPage); // Chỉnh sửa thể loại, nhận ID từ URL
     router.post('/categories/update', categoryController.handleUpdateCategory); // Cập nhật category (dùng chung với API)
     router.post('/categories/delete', categoryController.handleDeleteCategory); // Xóa category (dùng chung với API)
     router.get('/get-allcategories', categoryController.handleGetAllCategoriesPage); // Hiển thị tất cả category
@@ -29,6 +29,9 @@ let initWebRoutes = (app) => {
     router.post('/api/products', productController.handleCreateProduct); // Tạo sản phẩm mới
     router.put('/api/products', productController.handleUpdateProduct);  // Cập nhật sản phẩm
     router.delete('/api/products', productController.handleDeleteProduct); // Xóa sản phẩm
+// API routes
+router.get('/api/products/:id', productController.handleGetProductById); // Lấy sản phẩm theo ID
+
 
     // Web routes
     router.get('/get-allproducts', productController.handleGetAllProductsPage); // Hiển thị trang tất cả sản phẩm

@@ -9,7 +9,9 @@
         "fee": "Checkup package",
         "check-health": "General health check",
         "support": "Support",
-        "welcome": "Welcome ,"
+        "welcome": "Welcome ,",
+        "logout":"Logout",
+        "login":"Login"
     },
     "banner": {
         "title1": "MEDICAL BACKGROUND",

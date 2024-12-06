@@ -86,6 +86,23 @@ let handleGetEditProductPage = async (req, res) => {
         return res.send('Product ID not provided');
     }
 };
+let handleGetProductById = async (req, res) => {
+    const productId = req.params.id; // Lấy id từ URL
+    console.log('Fetching product with ID:', productId); // Log ID từ request
+
+    try {
+        let product = await CRUDServiceProduct.getProductById(productId);
+        if (product) {
+            return res.json({ product });
+        } else {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+    } catch (error) {
+        console.log('Error fetching product:', error);
+        return res.status(500).json({ message: 'Error fetching product' });
+    }
+};
+
 
 let handleUpdateProduct = async (req, res) => {
     let productData = req.body;
@@ -131,5 +148,6 @@ module.exports = {
     handleCreateProduct: [upload.single('image'), handleCreateProduct],
     handleGetEditProductPage,
     handleUpdateProduct: [upload.single('image'), handleUpdateProduct],
-    handleDeleteProduct
+    handleDeleteProduct,
+    handleGetProductById
 };

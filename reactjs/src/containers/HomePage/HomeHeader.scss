@@ -2,7 +2,11 @@
     height: 60px;
     width: 100%;
     padding: 0 40px;
-
+    position: sticky; /* Giữ cố định khi cuộn */
+    top: 0;
+    z-index: 1000;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
     .home-header-content {
         width: 100%;
@@ -159,6 +163,19 @@
     font-weight: 500;
     color: #333;
 }
+.btn-login {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.2s ease;
+    span {
+        margin-left: 5px;
+    }
+    &:hover {
+        color: #007bff;
+    }
+}
 
 .content-down {
     height: 35%;
@@ -191,5 +208,32 @@
                 }
             }
         }
+    }
+}
+.cart {
+    position: relative;
+    margin-left: 20px; /* Khoảng cách giữa hỗ trợ và giỏ hàng */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    i {
+        font-size: 20px; /* Kích thước icon */
+        color: #333;
+    }
+
+    .cart-count {
+        position: absolute;
+        top: -5px;
+        right: -10px;
+        background-color: red; /* Nền đỏ cho số lượng sản phẩm */
+        color: white; /* Màu chữ */
+        font-size: 12px; /* Kích thước số */
+        width: 16px;
+        height: 16px;
+        border-radius: 50%; /* Bo tròn */
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }

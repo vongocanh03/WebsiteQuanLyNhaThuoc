@@ -1,0 +1,230 @@
+.product-detail-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+
+    .product-detail {
+        display: flex;
+        gap: 20px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+        /* Phần trái: Hình ảnh sản phẩm */
+        .product-section-left {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .product-image {
+                width: 100%;
+                max-width: 400px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        /* Phần giữa: Thông tin sản phẩm */
+        .product-section-center {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .product-title {
+                font-size: 24px;
+                font-weight: bold;
+                color: #333;
+            }
+
+            .product-price {
+                font-size: 20px;
+                color: #e53935;
+                font-weight: bold;
+            }
+
+            .product-features {
+                list-style: none;
+                padding: 0;
+                margin: 10px 0;
+
+                li {
+                    font-size: 16px;
+                    color: #555;
+                    margin-bottom: 5px;
+
+                    &:before {
+                        content: '✔';
+                        color: #4caf50;
+                        margin-right: 8px;
+                    }
+                }
+            }
+
+            .product-description {
+                font-size: 14px;
+                color: #555;
+                line-height: 1.6;
+                border-top: 1px solid #ddd;
+                padding-top: 10px;
+            }
+        }
+
+        .product-section-right {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        
+            .quantity-container {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+        
+                .quantity-label {
+                    font-size: 14px;
+                    color: #555;
+                    margin-right: 10px;
+                }
+        
+                .quantity-controls {
+                    display: flex;
+                    align-items: center;
+        
+                    .btn-decrease,
+                    .btn-increase {
+                        background: #007bff;
+                        color: #fff;
+                        border: none;
+                        width: 30px;
+                        height: 30px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 16px;
+                        font-weight: bold;
+                        cursor: pointer;
+                        border-radius: 4px;
+        
+                        &:hover {
+                            background: #0056b3;
+                        }
+                    }
+        
+                    .quantity-input {
+                        width: 50px;
+                        text-align: center;
+                        border: 1px solid #ddd;
+                        margin: 0 5px;
+                        border-radius: 4px;
+                        padding: 5px 0;
+                    }
+                }
+            }
+        
+            .product-actions {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+        
+                .btn-buy-now {
+                    flex: 1;
+                    background: #007bff;
+                    color: #fff;
+                    padding: 10px 20px;
+                    font-size: 14px;
+                    font-weight: bold;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+        
+                    &:hover {
+                        background: #0056b3;
+                    }
+                }
+        
+                .btn-add-cart {
+                    flex: 1;
+                    background: #fff;
+                    color: #007bff;
+                    padding: 10px 20px;
+                    font-size: 14px;
+                    font-weight: bold;
+                    border: 1px solid #007bff;
+                    border-radius: 4px;
+                    cursor: pointer;
+        
+                    &:hover {
+                        background: #007bff;
+                        color: #fff;
+                    }
+                }
+            }
+        
+            .product-support {
+                display: flex;
+                justify-content: space-between; /* Chia đều các phần tử */
+                text-align: center; /* Căn giữa nội dung theo chiều ngang */
+                margin-top: 20px;
+            
+                .support-item {
+                    display: flex;
+                    flex-direction: column; /* Sắp xếp hình ảnh phía trên, text phía dưới */
+                    align-items: center; /* Căn giữa theo chiều ngang */
+                    justify-content: center;
+                    width: 30%; /* Chia đều chiều rộng mỗi mục */
+                    max-width: 120px; /* Đặt giới hạn chiều rộng cho mỗi mục */
+                    text-align: center;
+            
+                    img {
+                        width: 60px; /* Đặt kích thước hình ảnh */
+                        height: 60px;
+                        object-fit: contain; /* Đảm bảo hình ảnh không bị méo */
+                        margin-bottom: 10px; /* Khoảng cách giữa ảnh và span */
+                    }
+            
+                    span {
+                        font-size: 14px; /* Đặt kích thước font */
+                        color: #333; /* Màu chữ */
+                    }
+                }
+            }
+            
+        
+        
+
+            .product-description {
+                font-size: 14px;
+                color: #555;
+                line-height: 1.6;
+                border-top: 1px solid #ddd;
+                padding-top: 10px;
+                position: relative;
+            
+                p {
+                    margin-bottom: 10px;
+                }
+            
+                .toggle-description-btn {
+                    background-color: transparent;
+                    color: #007bff;
+                    border: none;
+                    cursor: pointer;
+                    font-size: 14px;
+                    font-weight: bold;
+                    text-decoration: underline;
+                    padding: 0;
+            
+                    &:hover {
+                        color: #0056b3;
+                    }
+                }
+        }
+    }
+    
+    }
+    
+
+}

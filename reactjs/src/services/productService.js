@@ -4,6 +4,14 @@ import axios from '../axios';
 const getAllProducts = () => {
     return axios.get('/api/products');
 };
+// Lấy chi tiết sản phẩm theo ID
+const getProductById = async (id) => {
+    const url = `http://localhost:8080/api/products/${id}`;
+    console.log('Calling API:', url); // Log URL API
+    return await axios.get(url);
+};
+
+
 
 // Tạo sản phẩm mới
 const createNewProductService = (data) => {
@@ -24,6 +32,7 @@ const deleteProductService = (productId) => {
 
 export {
     getAllProducts,
+    getProductById,
     createNewProductService,
     updateProductService,
     deleteProductService,

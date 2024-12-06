@@ -34,10 +34,22 @@ let createNewProduct = async (productData) => {
 };
 
 let getProductById = async (productId) => {
-    return await Product.findByPk(productId, {
-        include: [{ model: Category, as: 'category', attributes: ['name'] }]
-    });
+    try {
+        const product = await Product.findByPk(productId, {
+            include: [{ model: Category, as: 'category', attributes: ['name'] }]
+        });
+        
+        if (!product) {
+            console.log(`No product found with ID: ${productId}`);  // Log nếu không tìm thấy sản phẩm
+            return null;  // Trả về null nếu không tìm thấy sản phẩm
+        }
+        return product;
+    } catch (error) {
+        console.log('Error fetching product by ID:', error);
+        throw error;
+    }
 };
+
 
 let updateProduct = async (productData) => {
     let product = await Product.findByPk(productData.id);

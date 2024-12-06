@@ -22,6 +22,15 @@ let handleCreateCategory = async (req, res) => {
             return res.status(400).json({ message: 'Category name is required' });
         }
 
+        // Xử lý loại bỏ khoảng trắng thừa
+        categoryData.name = categoryData.name.trim();
+
+        // Kiểm tra xem tên thể loại có tồn tại trong cơ sở dữ liệu không
+        let existingCategory = await CRUDServiceCategory.getCategoryByName(categoryData.name);
+        if (existingCategory) {
+            return res.status(400).json({ message: 'Category name already exists' });
+        }
+
         let createdCategory = await CRUDServiceCategory.createNewCategory(categoryData);
         return res.status(201).json({
             message: 'Category created successfully',
@@ -29,9 +38,6 @@ let handleCreateCategory = async (req, res) => {
         });
     } catch (error) {
         console.log('Error creating category:', error);
-        if (error.message === 'Category already exists') {
-            return res.status(400).json({ message: 'Category already exists' });
-        }
         return res.status(500).json({ message: 'Error creating category', error: error.message });
     }
 };
@@ -81,7 +87,7 @@ let handleDeleteCategory = async (req, res) => {
 let handleGetAllCategoriesPage = async (req, res) => {
     try {
         let categories = await CRUDServiceCategory.getAllCategories();
-        return res.render('categories/allCategories', {
+        return res.render('category/displayCategories', {
             categories: categories
         });
     } catch (error) {
@@ -90,20 +96,38 @@ let handleGetAllCategoriesPage = async (req, res) => {
     }
 };
 
-let getEditCategoryPage = (req, res) => {
-    return res.render('categories/editCategory');
+let getEditCategoryPage = async (req, res) => {
+    try {
+        const categoryId = req.params.id; // Lấy ID từ URL
+        
+        // Lấy thể loại theo ID
+        const category = await CRUDServiceCategory.getCategoryById(categoryId);
+        
+        // Truyền dữ liệu thể loại vào view
+        if (!category) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        return res.render('category/editCategory', {
+            category: category
+        });
+    } catch (error) {
+        console.log('Error fetching category for edit:', error);
+        return res.status(500).json({ message: 'Error fetching category for edit', error: error.message });
+    }
 };
+
 
 let createCategoryPage = (req, res) => {
-    return res.render('categories/createCategory');
+    return res.render('category/createCategory');
 };
 
-export default {
-    handleGetAllCategories,
-    handleCreateCategory,
-    handleUpdateCategory,
-    handleDeleteCategory,
-    handleGetAllCategoriesPage,
-    getEditCategoryPage,
-    createCategoryPage
+module.exports= {
+    handleGetAllCategories:handleGetAllCategories,
+    handleCreateCategory:handleCreateCategory,
+    handleUpdateCategory:handleUpdateCategory,
+    handleDeleteCategory:handleDeleteCategory,
+    handleGetAllCategoriesPage:handleGetAllCategoriesPage,
+    getEditCategoryPage:getEditCategoryPage,
+    createCategoryPage:createCategoryPage,
 };
