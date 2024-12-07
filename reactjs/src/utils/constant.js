@@ -1,9 +1,12 @@
+import HomeHeader from "../containers/HomePage/HomeHeader";
+
 export const path = {
     HOME: '/',
     HOMEPAGE: '/home',
     LOGIN: '/login',
     LOG_OUT: '/logout',
-    SYSTEM: '/system'
+    SYSTEM: '/system',
+    HOMEHEADER:'/homeheader'
 };
 
 export const LANGUAGES = {

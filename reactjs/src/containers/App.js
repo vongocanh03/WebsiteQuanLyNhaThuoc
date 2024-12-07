@@ -16,7 +16,8 @@ import { CustomToastCloseButton } from '../components/CustomToast';
 import ProductList from './HomePage/ProductList';
 import ProductDetail from './HomePage/ProductDetail';
 import MainLayout from './Layout/MainLayout';
-
+import CartPage from './HomePage/CartPage';
+import HomeHeader from './HomePage/HomeHeader';
 class App extends Component {
 
     handlePersistorState = () => {
@@ -45,18 +46,20 @@ class App extends Component {
                         <span className="content-container">
                             <CustomScrollbars style={{ height: '100vh', width: '100%' }}>
                                 {/* HomeHeader chỉ được hiển thị trong MainLayout */}
-                              
-                                    <Switch>
-                                        <Route path={path.HOME} exact component={Home} />
-                                        <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
-                                        <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
-                                        <Route path={path.HOMEPAGE} component={HomePage} />
-                                        <MainLayout>
+
+                                <Switch>
+                                    <Route path={path.HOME} exact component={Home} />
+                                    <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
+                                    <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
+                                    <Route path={path.HOMEPAGE} component={HomePage} />
+                                    <MainLayout>
                                         <Route exact path="/" component={ProductList} />
                                         <Route path="/product/:id" component={ProductDetail} />
-                                        </MainLayout>
-                                    </Switch>
-                        
+                                        <Route path="/cart" component={CartPage} />
+                                    </MainLayout>
+                                    
+                                </Switch>
+
                             </CustomScrollbars>
                         </span>
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { getProductById } from '../../services/productService';
+import { withRouter } from 'react-router-dom'; // Để chuyển hướng
 import './ProductDetail.scss';
 
 class ProductDetail extends Component {
@@ -8,8 +9,8 @@ class ProductDetail extends Component {
         this.state = {
             product: null,
             error: null,
-            isExpanded: false, // Quản lý trạng thái "Xem thêm/Thu gọn"
-            quantity: 1, // Số lượng mặc định
+            isExpanded: false,
+            quantity: 1,
         };
     }
 
@@ -28,24 +29,50 @@ class ProductDetail extends Component {
         }
     }
 
-    // Xử lý tăng số lượng
     handleIncrease = () => {
         this.setState((prevState) => ({
             quantity: prevState.quantity + 1,
         }));
     };
 
-    // Xử lý giảm số lượng
     handleDecrease = () => {
         this.setState((prevState) => ({
-            quantity: prevState.quantity > 1 ? prevState.quantity - 1 : 1, // Không giảm xuống dưới 1
+            quantity: prevState.quantity > 1 ? prevState.quantity - 1 : 1,
         }));
     };
 
     toggleDescription = () => {
         this.setState((prevState) => ({
-            isExpanded: !prevState.isExpanded, // Đảo trạng thái giữa "Xem thêm" và "Thu gọn"
+            isExpanded: !prevState.isExpanded,
         }));
+    };
+
+    handleAddToCart = () => {
+        const { product, quantity } = this.state;
+        const cartItem = {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            category: product.category?.name || 'Không xác định', // Lưu thêm thể loại
+            quantity,
+        };
+
+        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const existingItemIndex = cartItems.findIndex(item => item.id === product.id);
+
+        if (existingItemIndex !== -1) {
+            cartItems[existingItemIndex].quantity += quantity; // Nếu sản phẩm đã có trong giỏ, tăng số lượng
+        } else {
+            cartItems.push(cartItem); // Nếu sản phẩm chưa có, thêm mới
+        }
+
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    };
+
+    handleBuyNow = () => {
+        this.handleAddToCart(); // Thêm sản phẩm vào giỏ hàng
+        this.props.history.push('/cart'); // Chuyển hướng đến trang giỏ hàng
     };
 
     render() {
@@ -59,7 +86,6 @@ class ProductDetail extends Component {
             return <div className="loading">Đang tải...</div>;
         }
 
-        // Rút gọn mô tả sản phẩm nếu chưa nhấn "Xem thêm"
         const truncatedDescription =
             product.description && product.description.length > 200
                 ? product.description.substring(0, 200) + '...'
@@ -68,7 +94,6 @@ class ProductDetail extends Component {
         return (
             <div className="product-detail-container">
                 <div className="product-detail">
-                    {/* Phần hình ảnh */}
                     <div className="product-section-left">
                         <img
                             src={`http://localhost:8080${product.image}`}
@@ -77,7 +102,6 @@ class ProductDetail extends Component {
                         />
                     </div>
 
-                    {/* Phần thông tin sản phẩm */}
                     <div className="product-section-center">
                         <h1 className="product-title">{product.name}</h1>
                         <p className="product-price">
@@ -87,12 +111,9 @@ class ProductDetail extends Component {
                             <li>Thể loại: {product.category?.name}</li>
                         </ul>
 
-                        {/* Phần mô tả sản phẩm */}
                         <div className="product-description">
                             <p>
-                                {isExpanded
-                                    ? product.description
-                                    : truncatedDescription}
+                                {isExpanded ? product.description : truncatedDescription}
                             </p>
                             <button
                                 className="toggle-description-btn"
@@ -103,7 +124,6 @@ class ProductDetail extends Component {
                         </div>
                     </div>
 
-                    {/* Phần hành động */}
                     <div className="product-section-right">
                         <div className="quantity-container">
                             <span className="quantity-label">Số lượng</span>
@@ -129,18 +149,18 @@ class ProductDetail extends Component {
                             </div>
                         </div>
 
-                        {/* Nút hành động */}
                         <div className="product-actions">
-                            <button className="btn-buy-now">Mua ngay</button>
-                            <button className="btn-add-cart">Thêm vào giỏ</button>
+                            <button className="btn-buy-now" onClick={this.handleBuyNow}>Mua ngay</button>
+                            <button className="btn-add-cart" onClick={this.handleAddToCart}>
+                                Thêm vào giỏ
+                            </button>
                         </div>
 
-                        {/* Chính sách hỗ trợ */}
                         <div className="product-support">
                             <div className="support-item">
                                 <img
                                     src="https://kretoss.com/wp-content/themes/kretoss-technology/assets/media/thank-you-img.png"
-                                    alt="Đủ thuốc chuẩn"
+                                    alt="Đúng thuốc chuẩn"
                                 />
                                 <span>Đúng thuốc chuẩn</span>
                             </div>
@@ -166,4 +186,4 @@ class ProductDetail extends Component {
     }
 }
 
-export default ProductDetail;
+export default withRouter(ProductDetail);

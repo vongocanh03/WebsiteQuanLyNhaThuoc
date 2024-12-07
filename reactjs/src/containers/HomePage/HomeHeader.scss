@@ -218,7 +218,7 @@
     align-items: center;
 
     i {
-        font-size: 20px; /* Kích thước icon */
+        font-size: 40px; /* Kích thước icon */
         color: #333;
     }
 
@@ -236,4 +236,13 @@
         justify-content: center;
         align-items: center;
     }
+}
+.home-header-content .center-content a {
+    text-decoration: none; /* Xóa dấu gạch chân */
+    color: inherit; /* Đảm bảo màu chữ không bị thay đổi */
+}
+
+.home-header-content .center-content a:hover {
+    color: #51575c; /* Thêm hiệu ứng màu khi hover nếu cần */
+    text-decoration: none; /* Đảm bảo không có gạch chân khi hover */
 }

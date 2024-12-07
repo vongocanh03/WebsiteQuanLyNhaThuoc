@@ -3,6 +3,7 @@ import homeController from '../controllers/homeController';
 import userController from '../controllers/userController';
 import categoryController from '../controllers/categoryController';
 import productController from '../controllers/productController';
+const cartController = require('../controllers/cartController');
 
 let router = express.Router();
 
@@ -56,6 +57,14 @@ router.get('/api/products/:id', productController.handleGetProductById); // Lấ
     router.post('/api/create-category', categoryController.handleCreateCategory); // Tạo category mới
     router.put('/api/update-category', categoryController.handleUpdateCategory); // Cập nhật category
     router.delete('/api/delete-category', categoryController.handleDeleteCategory); // Xóa category
+    router.post('/add', cartController.addToCart);
+
+    // Lấy danh sách giỏ hàng của người dùng
+    router.get('/:userId', cartController.getCart);
+    
+    // Xóa sản phẩm khỏi giỏ hàng
+    router.delete('/:userId/:productId', cartController.removeFromCart);
+    router.put('/api/cart/:userId/:productId', cartController.updateQuantityInCart);
 
     // Return router middleware
     return app.use("/", router);

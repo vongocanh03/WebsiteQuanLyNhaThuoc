@@ -55,9 +55,9 @@ class Login extends Component {
 
                 // Kiểm tra roleId và điều hướng
                 const { roleId } = data.user;
-                if (parseInt(roleId) === 1) {
+                if (parseInt(roleId) === 3) {
                     this.props.navigate('/home');
-                } else if (parseInt(roleId) === 2 || parseInt(roleId) === 3) {
+                } else if (parseInt(roleId) === 2 || parseInt(roleId) === 1) {
                     this.props.navigate('/system/user-manage');
                 } else {
                     this.setState({

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import HomeHeader from './HomeHeader';
 import ProductList from './ProductList';
+import Banner from './Banner';
+import Foodter from './Foodter';
 class HomePage extends Component {
 
     render() {
@@ -9,7 +11,9 @@ class HomePage extends Component {
         return (
             <div>
              <HomeHeader/>   
+             <Banner/>
              <ProductList/> 
+            <Foodter/>
             </div>  
         );
     }
