@@ -16,7 +16,7 @@ class Banner extends React.Component {
                     </div>
                     <div className="search">
                         <i className="fas fa-search"></i>
-                        <input type="text" placeholder="Tìm chuyên khoa khám bệnh" />
+                        <input type="text" placeholder="Tìm kiếm sản phẩm" />
                     </div>
                 </div>
                 <div className="content-down">

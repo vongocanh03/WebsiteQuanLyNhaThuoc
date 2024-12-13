@@ -59,7 +59,7 @@ const Foodter = () => {
           <p>Góp ý, khiếu nại: <strong>18006928</strong> (Nhánh 3)</p>
           <h4>KẾT NỐI VỚI CHÚNG TÔI</h4>
           <div className="social-media">
-            <a href="#">Facebook</a>
+            <a href="https://www.facebook.com/profile.php?id=100022548919558">Facebook</a>
             <a href="#">Zalo</a>
           </div>
           <div className="qr-code">

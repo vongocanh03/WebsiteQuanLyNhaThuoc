@@ -19,16 +19,29 @@ class Header extends React.Component {
             this.props.history.push('/login');
         }
     };
-
+    handleLogout = () => {
+        // Lưu giỏ hàng vào localStorage trước khi xóa userId
+        const { userInfo, cartItems } = this.props; // Giả sử bạn lưu danh sách sản phẩm trong giỏ hàng vào Redux
+        if (cartItems && cartItems.length > 0) {
+            localStorage.setItem(`cart_${userInfo.id}`, JSON.stringify(cartItems));
+        }
+        
+        // Xóa userId khỏi localStorage
+        localStorage.removeItem('userId');
+        
+        // Thực hiện hành động logout
+        this.props.processLogout();
+    };
+    
     render() {
-        let { language, userInfo, processLogout, isLoggedIn } = this.props;
+        let { language, userInfo, isLoggedIn } = this.props;
 
         return (
             <div className="home-header-container">
                 <div className="home-header-content">
                     <div className="left-content">
                         <i className="fas fa-bars"></i>
-                        <img className="header-logo" src={logo} alt="Logo" />
+                        <img className="header-logo" src={logo} alt="Logo" href="#"/>
                     </div>
                     <div className="center-content">
                         <div className="child-content">
@@ -51,13 +64,16 @@ class Header extends React.Component {
                                 <FormattedMessage id="homeheader.select-room" />
                             </div>
                         </div>
-                        <div className="support">
+                        <div>
+                            <Link to="/support">
                             <i className="fas fa-question-circle"></i>
                             <FormattedMessage id="homeheader.support" />
+                            </Link>
                         </div>
                         <div>
                             <Link to="/cart">
-                                <i className="fas fa-shopping-cart"></i> Giỏ hàng
+                                <i className="fas fa-shopping-cart"></i> 
+                                <FormattedMessage id="homeheader.cart" />
                             </Link>
                         </div>
                     </div>
@@ -79,10 +95,11 @@ class Header extends React.Component {
                             EN
                         </div>
                         {isLoggedIn ? (
-                            <div className="btn btn-logout" onClick={processLogout}>
-                                <i className="fas fa-sign-out-alt"></i>
-                                <FormattedMessage id="homeheader.logout" />
-                            </div>
+                            <div className="btn btn-logout" onClick={this.handleLogout}>
+                            <i className="fas fa-sign-out-alt"></i>
+                            <FormattedMessage id="homeheader.logout" />
+                        </div>
+                        
                         ) : (
                             <div className="btn btn-login" onClick={this.handleLogin}>
                                 <i className="fas fa-sign-in-alt"></i>
@@ -99,6 +116,8 @@ class Header extends React.Component {
 const mapStateToProps = (state) => ({
     isLoggedIn: state.user.isLoggedIn,
     userInfo: state.user.userInfo,
+    cartItems: state.cart.cartItems // Lấy danh sách sản phẩm từ Redux
+
 });
 
 const mapDispatchToProps = (dispatch) => ({

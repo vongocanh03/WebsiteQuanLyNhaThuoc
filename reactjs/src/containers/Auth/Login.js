@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from "connected-react-router";
-// import * as actions from "../store/actions";
-import * as actions from "../../store/actions";
-
+import * as actions from "../../store/actions"; // Import actions
 import './Login.scss';
-import { FormattedMessage } from 'react-intl';
-// import { userService } from '../../services/userService';
 import { handleLoginApi } from '../../services/userService';
-
 
 class Login extends Component {
     constructor(props) {
@@ -18,43 +13,50 @@ class Login extends Component {
             password: '',
             showPassword: false,
             errMessage: ''
-        }
+        };
     }
 
     handleOnChangeUserName = (e) => {
         this.setState({
             username: e.target.value
-        })
-
+        });
     }
 
     handleOnChangePassword = (e) => {
         this.setState({
             password: e.target.value
-        })
-
-
+        });
     }
 
     handleLogin = async () => {
         this.setState({
             errMessage: ''
         });
+    
         try {
             let data = await handleLoginApi(this.state.username, this.state.password);
-            console.log('aa:', data); // Kiểm tra dữ liệu trả về
-
+    
             if (data && data.errCode !== 0) {
                 this.setState({
                     errMessage: data.message
                 });
             }
+    
             if (data && data.errCode === 0) {
                 this.props.userLoginSuccess(data.user);
-                console.log('User info:', data.user);
-
-                // Kiểm tra roleId và điều hướng
-                const { roleId } = data.user;
+                const { roleId, id: userId } = data.user;
+    
+                // Lưu userId vào localStorage và Redux
+                localStorage.setItem('userId', userId);
+                this.props.setUserId(userId);
+    
+                // Lấy giỏ hàng đã lưu trong localStorage
+                const savedCart = localStorage.getItem(`cart_${userId}`);
+                if (savedCart) {
+                    this.props.loadCartItems(JSON.parse(savedCart)); // Gọi action để load lại giỏ hàng
+                }
+    
+                // Điều hướng dựa trên roleId
                 if (parseInt(roleId) === 3) {
                     this.props.navigate('/home');
                 } else if (parseInt(roleId) === 2 || parseInt(roleId) === 1) {
@@ -64,7 +66,6 @@ class Login extends Component {
                         errMessage: 'Không xác định được quyền truy cập!'
                     });
                 }
-
             }
         } catch (e) {
             if (e.response && e.response.data) {
@@ -72,19 +73,16 @@ class Login extends Component {
                     errMessage: e.response.data.message
                 });
             }
-            console.log('error message', e.response);
+            console.error('Error message:', e.response || e);
         }
     };
-
-
-
+    
     handleShowHidePassword = () => {
-
         this.setState({
             showPassword: !this.state.showPassword
-        })
-        console.log(this.state.showPassword);
+        });
     }
+
     handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             this.handleLogin();
@@ -105,7 +103,7 @@ class Login extends Component {
                                 placeholder="Enter your user name"
                                 value={this.state.username}
                                 onChange={(e) => this.handleOnChangeUserName(e)}
-                                onKeyDown={this.handleKeyPress} // Thêm sự kiện onKeyDown
+                                onKeyDown={this.handleKeyPress}
                             />
                         </div>
                         <div className="col-12 form-group">
@@ -117,7 +115,7 @@ class Login extends Component {
                                     placeholder="Enter your password"
                                     value={this.state.password}
                                     onChange={(e) => this.handleOnChangePassword(e)}
-                                    onKeyDown={this.handleKeyPress} // Thêm sự kiện onKeyDown
+                                    onKeyDown={this.handleKeyPress}
                                 />
                                 <span onClick={() => this.handleShowHidePassword()}>
                                     <i className={this.state.showPassword ? 'fas fa-eye show-password' : 'fas fa-eye-slash show-password'} ></i>
@@ -159,11 +157,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         navigate: (path) => dispatch(push(path)),
-        // userLoginFail: () => dispatch(actions.adminLoginFail()),
-        userLoginSuccess: (userInfo) => dispatch(actions.userLoginSuccess(userInfo))
+        userLoginSuccess: (userInfo) => dispatch(actions.userLoginSuccess(userInfo)),
+        setUserId: (userId) => dispatch(actions.setUserId(userId)) // Action mới để lưu userId
     };
-
-
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

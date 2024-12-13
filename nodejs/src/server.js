@@ -6,6 +6,7 @@ import connectDB from './config/conectDB';
 import cors from 'cors';
 import path from 'path';
 import dotenv from 'dotenv';  // Cập nhật dotenv
+
 dotenv.config();  // Đảm bảo dotenv được gọi trước khi sử dụng process.env
 
 // Khởi tạo ứng dụng express
@@ -29,6 +30,7 @@ initWebRoutes(app);
 
 // Kết nối với cơ sở dữ liệu
 connectDB();
+//Thanh toán momo
 
 // Lấy PORT từ biến môi trường, nếu không có thì dùng 8080 mặc định
 const port = process.env.PORT || 8080;  

@@ -5,6 +5,7 @@ import UserManage from '../containers/System/UserManage';
 import ProductManage from '../containers/System/ProductManage';
 import CategoryManage from '../containers/System/CategoryManage';
 import Header from '../containers/Header/Header';
+import AdminSupportPage from '../containers/System/AdminSupportPage';
 
 
 class System extends Component {
@@ -19,6 +20,7 @@ class System extends Component {
 =                        <Route path="/system/user-manage" component={UserManage} />
                         <Route path="/system/product-manage" component={ProductManage} />
                         <Route path="/system/category-manage" component={CategoryManage} />
+                        <Route path="/system/support-manage" component={AdminSupportPage} />
                         <Route component={() => { return (<Redirect to={systemMenuPath} />) }} />
                         
                     </Switch>

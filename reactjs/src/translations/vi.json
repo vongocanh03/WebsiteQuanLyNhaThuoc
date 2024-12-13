@@ -11,7 +11,9 @@
         "support": "Hỗ trợ",
         "welcome": "Xin chào, ",
         "logout":" Đăng xuất",
-        "login":" Đăng nhập"
+        "login":" Đăng nhập",
+        "cart": "Giỏ hàng"
+
     },
     "banner": {
         "title1": "NỀN TẢNG Y TẾ",
@@ -56,7 +58,8 @@
                 "header": "Quản trị hệ thống",
                 "user-manage": "Quản lý tài khoản",
                 "product-manage": "Quản lý sản phẩm",
-                "category-manage": "Quản lý danh mục"
+                "category-manage": "Quản lý danh mục",
+                "support-manage": "Quản lý Hỗ trợ"
             },
             "system-parameter": {
                 "header": "Tham số hệ thống"

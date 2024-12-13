@@ -18,6 +18,8 @@ import ProductDetail from './HomePage/ProductDetail';
 import MainLayout from './Layout/MainLayout';
 import CartPage from './HomePage/CartPage';
 import HomeHeader from './HomePage/HomeHeader';
+import AddressForm from './HomePage/Addressform';
+import SupportPage from './HomePage/SupportPage';
 class App extends Component {
 
     handlePersistorState = () => {
@@ -56,6 +58,8 @@ class App extends Component {
                                         <Route exact path="/" component={ProductList} />
                                         <Route path="/product/:id" component={ProductDetail} />
                                         <Route path="/cart" component={CartPage} />
+                                        <Route path="/address-form" component={AddressForm} />
+                                        <Route path="/support" component={SupportPage } />
                                     </MainLayout>
                                     
                                 </Switch>

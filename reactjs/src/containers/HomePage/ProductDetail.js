@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { getProductById } from '../../services/productService';
 import { withRouter } from 'react-router-dom'; // Để chuyển hướng
 import './ProductDetail.scss';
-
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 class ProductDetail extends Component {
     constructor(props) {
         super(props);
@@ -49,26 +50,42 @@ class ProductDetail extends Component {
 
     handleAddToCart = () => {
         const { product, quantity } = this.state;
+        const userId = localStorage.getItem('userId'); // Lấy userId từ localStorage hoặc session
+    
+        if (!userId) {
+            toast.error('Vui lòng đăng nhập để thêm vào giỏ hàng', {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 2000,
+            });
+            return;
+        }
+    
         const cartItem = {
             id: product.id,
             name: product.name,
             price: product.price,
             image: product.image,
-            category: product.category?.name || 'Không xác định', // Lưu thêm thể loại
+            category: product.category?.name || 'Không xác định',
             quantity,
         };
-
-        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    
+        // Lấy giỏ hàng của người dùng từ localStorage
+        let cartItems = JSON.parse(localStorage.getItem(`cartItems_${userId}`)) || [];
         const existingItemIndex = cartItems.findIndex(item => item.id === product.id);
-
+    
         if (existingItemIndex !== -1) {
-            cartItems[existingItemIndex].quantity += quantity; // Nếu sản phẩm đã có trong giỏ, tăng số lượng
+            cartItems[existingItemIndex].quantity += quantity; // Tăng số lượng nếu sản phẩm đã có trong giỏ
         } else {
             cartItems.push(cartItem); // Nếu sản phẩm chưa có, thêm mới
         }
-
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    
+        localStorage.setItem(`cartItems_${userId}`, JSON.stringify(cartItems)); // Lưu giỏ hàng theo userId
+        toast.success('Đã thêm sản phẩm vào giỏ hàng thành công', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+        });
     };
+    
 
     handleBuyNow = () => {
         this.handleAddToCart(); // Thêm sản phẩm vào giỏ hàng

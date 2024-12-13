@@ -3,8 +3,9 @@ import homeController from '../controllers/homeController';
 import userController from '../controllers/userController';
 import categoryController from '../controllers/categoryController';
 import productController from '../controllers/productController';
-const cartController = require('../controllers/cartController');
-
+import orderController from '../controllers/orderController';
+import supportController from '../controllers/supportController';
+import cartController from '../controllers/cartController';
 let router = express.Router();
 
 let initWebRoutes = (app) => {
@@ -41,8 +42,8 @@ let initWebRoutes = (app) => {
     router.post('/api/products', productController.handleCreateProduct); // Tạo sản phẩm mới
     router.put('/api/products', productController.handleUpdateProduct);  // Cập nhật sản phẩm
     router.delete('/api/products', productController.handleDeleteProduct); // Xóa sản phẩm
-// API routes
-router.get('/api/products/:id', productController.handleGetProductById); // Lấy sản phẩm theo ID
+    // API routes
+    router.get('/api/products/:id', productController.handleGetProductById); // Lấy sản phẩm theo ID
 
 
     // Route API quản lý người dùng
@@ -57,16 +58,22 @@ router.get('/api/products/:id', productController.handleGetProductById); // Lấ
     router.post('/api/create-category', categoryController.handleCreateCategory); // Tạo category mới
     router.put('/api/update-category', categoryController.handleUpdateCategory); // Cập nhật category
     router.delete('/api/delete-category', categoryController.handleDeleteCategory); // Xóa category
-    router.post('/add', cartController.addToCart);
 
-    // Lấy danh sách giỏ hàng của người dùng
-    router.get('/:userId', cartController.getCart);
-    
-    // Xóa sản phẩm khỏi giỏ hàng
-    router.delete('/:userId/:productId', cartController.removeFromCart);
-    router.put('/api/cart/:userId/:productId', cartController.updateQuantityInCart);
+    router.post('/api/orders/create', orderController.createOrder);
+    router.get('/api/orders', orderController.getAllOrders);
+    router.get('/api/orders/:id', orderController.getOrderById);
+    router.put('/api/orders/:id', orderController.updateOrder);
+    router.delete('/api/orders/:id', orderController.deleteOrder);
+    // Route tạo yêu cầu hỗ trợ
+    router.post('/api/support', supportController.createSupportRequest);
 
+    // Route lấy tất cả yêu cầu hỗ trợ
+    router.get('/api/support', supportController.getAllSupportRequests);
+    // Cập nhật trạng thái yêu cầu hỗ trợ
+    router.put('/api/support/:id', supportController.updateSupportRequestStatus);
     // Return router middleware
+    router.post('/api/save', cartController.saveCart);
+    router.get('/:userId', cartController.getCartByUser);
     return app.use("/", router);
 };
 

@@ -6,7 +6,8 @@ export const path = {
     LOGIN: '/login',
     LOG_OUT: '/logout',
     SYSTEM: '/system',
-    HOMEHEADER:'/homeheader'
+    HOMEHEADER:'/homeheader',
+    ADMIN_SUPPORT: '/system/support-management',
 };
 
 export const LANGUAGES = {

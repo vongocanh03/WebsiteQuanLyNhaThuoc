@@ -1,63 +1,50 @@
-// src/controllers/cartController.js
-const cartService = require('../services/cartService');
+// controllers/cartController.js
+const { Cart, CartItem } = require('../models');
 
-// Thêm sản phẩm vào giỏ hàng
-exports.addToCart = async (req, res) => {
-    const { userId, productId, quantity } = req.body;
-    
+// Lưu giỏ hàng vào cơ sở dữ liệu
+exports.saveCart = async (req, res) => {
+    const { userId, cartItems } = req.body;
+
     try {
-        const cartItem = await cartService.addToCart(userId, productId, quantity);
-        res.status(200).json({ message: 'Sản phẩm đã được thêm vào giỏ hàng', cartItem });
+        // Tạo giỏ hàng
+        const cart = await Cart.create({ userId });
+
+        // Thêm các sản phẩm vào giỏ hàng
+        const items = cartItems.map((item) => ({
+            cartId: cart.id,
+            productId: item.productId,
+            name: item.name,
+            category: item.category,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image,
+        }));
+        await CartItem.bulkCreate(items);
+
+        res.status(201).json({ message: 'Giỏ hàng đã được lưu', cartId: cart.id });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error(error);
+        res.status(500).json({ message: 'Lỗi khi lưu giỏ hàng' });
     }
 };
 
-// Lấy giỏ hàng của người dùng
-exports.getCart = async (req, res) => {
+// Lấy giỏ hàng theo userId
+exports.getCartByUser = async (req, res) => {
     const { userId } = req.params;
-    
-    try {
-        const cartItems = await cartService.getCartByUserId(userId);
-        res.status(200).json(cartItems);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// Xóa sản phẩm khỏi giỏ hàng
-exports.removeFromCart = async (req, res) => {
-    const { userId, productId } = req.params;
-    
-    try {
-        const response = await cartService.removeFromCart(userId, productId);
-        res.status(200).json(response);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-exports.updateQuantityInCart = async (req, res) => {
-    const { userId, productId } = req.params;
-    const { quantity } = req.body;  // Đảm bảo số lượng được truyền trong body
 
     try {
-        const cartItem = await cartService.getCartItem(userId, productId);
-        if (!cartItem) {
-            return res.status(404).json({ error: 'Sản phẩm không có trong giỏ hàng' });
+        const cart = await Cart.findOne({
+            where: { userId },
+            include: { model: CartItem, as: 'items' },
+        });
+
+        if (!cart) {
+            return res.status(404).json({ message: 'Không tìm thấy giỏ hàng' });
         }
 
-        cartItem.quantity = quantity;
-        await cartItem.save();
-        res.status(200).json({ message: 'Số lượng sản phẩm đã được cập nhật', cartItem });
+        res.status(200).json(cart);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error(error);
+        res.status(500).json({ message: 'Lỗi khi lấy giỏ hàng' });
     }
 };
-exports.getCartItem = async (userId, productId) => {
-    try {
-        return await Cart.findOne({ where: { userId, productId } });
-    } catch (error) {
-        throw new Error('Lỗi khi tìm sản phẩm trong giỏ hàng');
-    }
-};
-

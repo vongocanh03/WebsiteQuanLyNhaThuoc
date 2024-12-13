@@ -1,0 +1,316 @@
+// Variables
+$primary-color: #4CAF50;
+$secondary-color: #f9f9f9;
+$header-color: #333;
+$border-color: #ddd;
+$text-color: #555;
+$error-color: #e74c3c;
+$table-header-bg: #f1f1f1;
+$table-row-hover-bg: #f9f9f9;
+$button-color: #007bff;
+$button-hover-color: #0056b3;
+
+// General reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  background-color: $secondary-color;
+  color: $text-color;
+}
+
+// Admin Support Page styling
+.admin-support-container {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  h1 {
+    font-size: 28px;
+    color: $primary-color;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 16px;
+    text-align: center;
+
+    &.error {
+      color: $error-color;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+
+    thead {
+      background-color: $table-header-bg;
+
+      th {
+        padding: 12px 15px;
+        text-align: left;
+        color: $header-color;
+        border-bottom: 2px solid $border-color;
+        font-weight: 600;
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background-color: $table-row-hover-bg;
+        }
+
+        &:hover {
+          background-color: lighten($table-row-hover-bg, 5%);
+        }
+      }
+
+      td {
+        padding: 12px 15px;
+        border-bottom: 1px solid $border-color;
+        text-align: left;
+        font-size: 14px;
+      }
+    }
+
+    th,
+    td {
+      font-size: 14px;
+    }
+  }
+
+  // Button Styling
+  .button {
+    padding: 10px 20px;
+    background-color: $button-color;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: $button-hover-color;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-support-container {
+    padding: 15px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  
+    thead {
+      background-color: $table-header-bg;
+  
+      th {
+        padding: 12px 15px;
+        text-align: left;
+        color: $header-color;
+        border-bottom: 2px solid $border-color;
+        font-weight: 600;
+      }
+    }
+  
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background-color: $table-row-hover-bg;
+        }
+  
+        &:hover {
+          background-color: lighten($table-row-hover-bg, 5%);
+        }
+      }
+  
+      td {
+        padding: 12px 15px;
+        border-bottom: 1px solid $border-color;
+        text-align: left;
+        font-size: 14px;
+      }
+    }
+  
+    th,
+    td {
+      font-size: 14px;
+    }
+  }
+  
+  button.button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  
+    &:hover {
+      background-color: #45a049;
+    }
+  }
+  /* AdminSupportPage.scss */
+
+.admin-support-container {
+    padding: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .pending {
+    color: rgb(221, 111, 9); /* Đỏ cho trạng thái Đang chờ */
+    font-weight: bold;
+  }
+  
+  .resolved {
+    color: green; /* Xanh lá cho trạng thái Đã xử lý */
+    font-weight: bold;
+  }
+  
+  button {
+    padding: 8px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  .error {
+    color: red;
+    font-size: 18px;
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  /* AdminSupportPage.scss */
+
+/* Các styles đã có */
+.admin-support-container {
+    padding: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .message-cell {
+    max-width: 200px;
+    white-space: nowrap; /* Không cho phép xuống dòng trong bảng */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Hiển thị ... nếu văn bản quá dài */
+  }
+  
+  .pending {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .resolved {
+    color: green;
+    font-weight: bold;
+  }
+  
+  button {
+    padding: 8px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 5px;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  .error {
+    color: red;
+    font-size: 18px;
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* Modal */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 60%;
+    max-width: 800px;
+    max-height: 70vh;
+    overflow-y: auto; /* Thêm thanh cuộn nếu nội dung quá dài */
+  }
+  
+  .modal-content p {
+    white-space: normal; /* Cho phép xuống dòng trong modal */
+    word-wrap: break-word; /* Chia từ nếu cần */
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
