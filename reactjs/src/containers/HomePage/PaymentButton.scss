@@ -1,0 +1,138 @@
+// Đặt tông màu chủ đạo
+$primary-color: #4caf50; // Màu xanh lá hiện đại
+$secondary-color: #f9f9f9; // Màu nền sáng
+$text-color: #333; // Màu chữ
+$border-color: #ddd; // Màu viền
+$table-header-bg: #f1f1f1; // Màu nền tiêu đề bảng
+$button-hover: #45a049; // Màu nút khi hover
+
+.payment-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: $secondary-color;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+
+  h2 {
+    text-align: center;
+    color: $primary-color;
+    margin-bottom: 1.5rem;
+  }
+
+  p {
+    color: $text-color;
+    font-size: 1rem;
+    margin: 0.5rem 0;
+
+    strong {
+      color: $primary-color;
+    }
+  }
+
+  .table-container {
+    margin-top: 1.5rem;
+
+    h3 {
+      color: $text-color;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 auto;
+      text-align: left;
+
+      thead {
+        background-color: $table-header-bg;
+
+        tr {
+          th {
+            padding: 0.75rem;
+            border: 1px solid $border-color;
+            color: $text-color;
+            font-weight: bold;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          &:nth-child(odd) {
+            background-color: #fafafa;
+          }
+
+          &:hover {
+            background-color: #f5f5f5;
+          }
+
+          td {
+            padding: 0.75rem;
+            border: 1px solid $border-color;
+            color: $text-color;
+          }
+        }
+      }
+    }
+  }
+
+  .total-amount {
+    text-align: right;
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+
+    strong {
+      color: $primary-color;
+    }
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color:#b21383;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+   
+  }
+  .momo-button {
+    
+    color: #fff; /* Màu chữ trắng */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  
+    &:hover {
+      background-color: #6a1bb8; /* Tông màu tím đậm hơn khi hover */
+    }
+  }
+  
+  .vnpay-button {
+    background-color: #1e90ff; /* Màu xanh da trời */
+    color: #fff; /* Màu chữ trắng */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  
+    &:hover {
+      background-color: #187bcd; /* Tông màu xanh đậm hơn khi hover */
+    }
+  }
+  
+}

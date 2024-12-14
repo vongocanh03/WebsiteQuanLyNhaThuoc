@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom'; // Để chuyển hướng
 import './ProductDetail.scss';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getCommentsByProductId, addComment } from '../../services/commentService'; // Thêm service mới
+
 class ProductDetail extends Component {
     constructor(props) {
         super(props);
@@ -12,10 +14,13 @@ class ProductDetail extends Component {
             error: null,
             isExpanded: false,
             quantity: 1,
+            comments: [],
+            newComment: '',
         };
     }
 
     async componentDidMount() {
+
         const { id } = this.props.match.params;
         try {
             const response = await getProductById(id);
@@ -28,7 +33,61 @@ class ProductDetail extends Component {
             console.error('Error fetching product details:', error);
             this.setState({ error: 'Error fetching product details' });
         }
+        await this.fetchComments(id);
     }
+    fetchComments = async (productId) => {
+        try {
+            const response = await getCommentsByProductId(productId);  // Cập nhật service để gọi đúng API
+            this.setState({ comments: response.comments });
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+        }
+    };
+    renderComments = () => {
+        const { comments } = this.state;
+
+        if (!comments || comments.length === 0) {
+            return <p>Chưa có bình luận nào.</p>;
+        }
+
+        return comments.map((comment, index) => (
+            <div key={index} className="comment-item">
+                <p>
+                    <strong>{comment.user?.lastName || 'Người dùng'}:</strong> {comment.content}
+                </p>
+                <small>{new Date(comment.createdAt).toLocaleString()}</small>
+            </div>
+        ));
+    };
+
+
+    handleCommentChange = (e) => {
+        this.setState({ newComment: e.target.value });
+    };
+
+    handleCommentSubmit = async () => {
+        const { id } = this.props.match.params;
+        const userId = localStorage.getItem('userId');
+        const { newComment } = this.state;
+
+        if (!userId) {
+            toast.error('Vui lòng đăng nhập để bình luận.');
+            return;
+        }
+
+        try {
+            console.log('Sending comment data:', { productId: id, userId, content: newComment });
+            const response = await addComment({ productId: id, userId, content: newComment });
+            console.log('Response from server:', response);
+
+            toast.success('Đã thêm bình luận!', { autoClose: 2000 });
+            this.setState({ newComment: '' });
+            this.fetchComments(id); // Refresh comments
+        } catch (error) {
+            console.error('Error adding comment:', error);
+            toast.error('Không thể thêm bình luận.', { autoClose: 2000 });
+        }
+    };
 
     handleIncrease = () => {
         this.setState((prevState) => ({
@@ -51,7 +110,7 @@ class ProductDetail extends Component {
     handleAddToCart = () => {
         const { product, quantity } = this.state;
         const userId = localStorage.getItem('userId'); // Lấy userId từ localStorage hoặc session
-    
+
         if (!userId) {
             toast.error('Vui lòng đăng nhập để thêm vào giỏ hàng', {
                 position: toast.POSITION.TOP_RIGHT,
@@ -59,7 +118,7 @@ class ProductDetail extends Component {
             });
             return;
         }
-    
+
         const cartItem = {
             id: product.id,
             name: product.name,
@@ -68,24 +127,24 @@ class ProductDetail extends Component {
             category: product.category?.name || 'Không xác định',
             quantity,
         };
-    
+
         // Lấy giỏ hàng của người dùng từ localStorage
         let cartItems = JSON.parse(localStorage.getItem(`cartItems_${userId}`)) || [];
         const existingItemIndex = cartItems.findIndex(item => item.id === product.id);
-    
+
         if (existingItemIndex !== -1) {
             cartItems[existingItemIndex].quantity += quantity; // Tăng số lượng nếu sản phẩm đã có trong giỏ
         } else {
             cartItems.push(cartItem); // Nếu sản phẩm chưa có, thêm mới
         }
-    
+
         localStorage.setItem(`cartItems_${userId}`, JSON.stringify(cartItems)); // Lưu giỏ hàng theo userId
         toast.success('Đã thêm sản phẩm vào giỏ hàng thành công', {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 2000,
         });
     };
-    
+
 
     handleBuyNow = () => {
         this.handleAddToCart(); // Thêm sản phẩm vào giỏ hàng
@@ -93,20 +152,21 @@ class ProductDetail extends Component {
     };
 
     render() {
-        const { product, error, isExpanded, quantity } = this.state;
+        const { newComment, product, error, isExpanded, quantity } = this.state;
 
         if (error) {
             return <div className="error-message">{error}</div>;
         }
 
         if (!product) {
-            return <div className="loading">Đang tải...</div>;
+            return <div className="loading">Đang tải sản phẩm...</div>;
         }
 
         const truncatedDescription =
             product.description && product.description.length > 200
                 ? product.description.substring(0, 200) + '...'
                 : product.description;
+
 
         return (
             <div className="product-detail-container">
@@ -196,7 +256,20 @@ class ProductDetail extends Component {
                                 <span>Miễn phí vận chuyển</span>
                             </div>
                         </div>
+
                     </div>
+                </div>
+                <div className="comments-section">
+                    <h3>Bình luận sản phẩm</h3>
+                    <div className="comment-form">
+                        <textarea
+                            value={newComment}
+                            onChange={this.handleCommentChange}
+                            placeholder="Viết bình luận..."
+                        ></textarea>
+                        <button onClick={this.handleCommentSubmit}>Gửi bình luận</button>
+                    </div>
+                    <div className="comments-list">{this.renderComments()}</div>
                 </div>
             </div>
         );

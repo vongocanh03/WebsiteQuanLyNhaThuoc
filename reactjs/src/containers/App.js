@@ -20,6 +20,10 @@ import CartPage from './HomePage/CartPage';
 import HomeHeader from './HomePage/HomeHeader';
 import AddressForm from './HomePage/Addressform';
 import SupportPage from './HomePage/SupportPage';
+import PaymentButton from './HomePage/PaymentButton';
+import OrdersList from './HomePage/OrderDetail';
+import OrderDetail from './HomePage/OrderDetail';
+
 class App extends Component {
 
     handlePersistorState = () => {
@@ -54,14 +58,18 @@ class App extends Component {
                                     <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
                                     <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
                                     <Route path={path.HOMEPAGE} component={HomePage} />
+                                    
                                     <MainLayout>
                                         <Route exact path="/" component={ProductList} />
                                         <Route path="/product/:id" component={ProductDetail} />
                                         <Route path="/cart" component={CartPage} />
+                                    
                                         <Route path="/address-form" component={AddressForm} />
+                                        <Route path="/payment" component={PaymentButton} />
+                                        <Route path="/order-detail" component={OrderDetail} />
                                         <Route path="/support" component={SupportPage } />
                                     </MainLayout>
-                                    
+                                   
                                 </Switch>
 
                             </CustomScrollbars>

@@ -75,7 +75,7 @@ const OrderController = {
      */
     async getOrderById(req, res) {
         const { id } = req.params;
-
+    
         try {
             const order = await Order.findByPk(id, {
                 include: [{
@@ -84,18 +84,18 @@ const OrderController = {
                     through: { attributes: ['quantity'] },
                 }],
             });
-
+    
             if (!order) {
                 return res.status(404).json({ message: 'Không tìm thấy đơn hàng.' });
             }
-
+    
             return res.status(200).json({ order });
         } catch (error) {
             console.error('Lỗi khi lấy chi tiết đơn hàng:', error);
             return res.status(500).json({ message: 'Có lỗi xảy ra khi lấy chi tiết đơn hàng.', error: error.message });
         }
     },
-
+    
     /**
      * Cập nhật thông tin đơn hàng
      * @param {Object} req - Yêu cầu HTTP
@@ -161,7 +161,41 @@ const OrderController = {
             console.error('Lỗi khi xóa đơn hàng:', error);
             return res.status(500).json({ message: 'Có lỗi xảy ra khi xóa đơn hàng.', error: error.message });
         }
-    }
+    },
+    async updatePaymentStatus(req, res) {
+        const { orderId, status } = req.body;
+        try {
+            const order = await Order.findByPk(orderId);
+            if (!order) {
+                return res.status(404).json({ message: 'Không tìm thấy đơn hàng.' });
+            }
+            order.paymentStatus = status; // Cập nhật trạng thái thanh toán
+            await order.save();
+            return res.status(200).json({ message: 'Cập nhật trạng thái thanh toán thành công!' });
+        } catch (error) {
+            console.error('Lỗi khi cập nhật trạng thái thanh toán:', error);
+            return res.status(500).json({ message: 'Có lỗi xảy ra khi cập nhật trạng thái thanh toán.', error: error.message });
+        }
+    },
+    async getOrdersByUser(req, res) {
+        const { userId } = req.params;
+        try {
+            const orders = await Order.findAll({
+                where: { userId }, // Lọc theo userId
+                include: [
+                    {
+                        model: Product,
+                        as: 'products',
+                        through: { attributes: ['quantity'] }
+                    }
+                ]
+            });
+            return res.status(200).json({ orders });
+        } catch (error) {
+            console.error('Lỗi khi lấy danh sách đơn hàng:', error);
+            return res.status(500).json({ message: 'Có lỗi xảy ra khi lấy danh sách đơn hàng.', error: error.message });
+        }
+    },
 };
 
 module.exports = OrderController;

@@ -6,6 +6,9 @@ import productController from '../controllers/productController';
 import orderController from '../controllers/orderController';
 import supportController from '../controllers/supportController';
 import cartController from '../controllers/cartController';
+import momoController from '../controllers/momoController';
+import paymentController from '../controllers/paymentController';
+import commentsController from '../controllers/commentsController';
 let router = express.Router();
 
 let initWebRoutes = (app) => {
@@ -64,6 +67,11 @@ let initWebRoutes = (app) => {
     router.get('/api/orders/:id', orderController.getOrderById);
     router.put('/api/orders/:id', orderController.updateOrder);
     router.delete('/api/orders/:id', orderController.deleteOrder);
+    // Lấy tất cả đơn hàng của người dùng
+    router.get('/api/orders/user/:userId', orderController.getOrdersByUser);
+
+    // Cập nhật trạng thái thanh toán của đơn hàng
+    router.put('/api/orders/payment-status', orderController.updatePaymentStatus);
     // Route tạo yêu cầu hỗ trợ
     router.post('/api/support', supportController.createSupportRequest);
 
@@ -74,6 +82,20 @@ let initWebRoutes = (app) => {
     // Return router middleware
     router.post('/api/save', cartController.saveCart);
     router.get('/:userId', cartController.getCartByUser);
+    router.post('/api/momo/pay', momoController.momoPayment);
+
+    // API tạo thanh toán
+    router.post('/payments', paymentController.createPayment);
+
+    // API lấy thống kê thanh toán
+    router.get('/payments', paymentController.getPaymentStatistics);
+
+    router.post('/api/comment', commentsController.addComment);
+
+    // API lấy thống kê thanh toán
+    router.get('/api/comments/:productId', commentsController.getCommentsByProductId);
+
+
     return app.use("/", router);
 };
 

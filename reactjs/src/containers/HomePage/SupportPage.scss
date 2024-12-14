@@ -79,7 +79,9 @@ body {
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.2s;
-
+      display: flex; // Đảm bảo nội dung có thể căn giữa
+      align-items: center; // Căn giữa theo trục dọc
+      justify-content: center; // Căn giữa theo trục ngang
       &:hover {
         background-color: darken($primary-color, 10%);
         transform: translateY(-2px);

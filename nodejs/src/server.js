@@ -30,7 +30,6 @@ initWebRoutes(app);
 
 // Kết nối với cơ sở dữ liệu
 connectDB();
-//Thanh toán momo
 
 // Lấy PORT từ biến môi trường, nếu không có thì dùng 8080 mặc định
 const port = process.env.PORT || 8080;  

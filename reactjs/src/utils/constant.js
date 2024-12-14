@@ -8,6 +8,8 @@ export const path = {
     SYSTEM: '/system',
     HOMEHEADER:'/homeheader',
     ADMIN_SUPPORT: '/system/support-management',
+    PAYMENT:'/momopayment'
+
 };
 
 export const LANGUAGES = {

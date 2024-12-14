@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom'; // Import useHistory
 import './Addressform.scss';
 
-const AddressForm = ({ location, onAddressSubmit }) => {
+const AddressForm = ({ location }) => {
+    const history = useHistory(); // Khởi tạo useHistory
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
@@ -13,17 +15,14 @@ const AddressForm = ({ location, onAddressSubmit }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
+    const [cart, setCart] = useState(location?.state?.cart || []);
 
-    const [cart, setCart] = useState(location?.state?.cart || []); // Nhận giỏ hàng từ CartPage
-
-    // Lấy danh sách tỉnh
     useEffect(() => {
         axios.get('https://provinces.open-api.vn/api/?depth=1')
             .then(response => setProvinces(response.data))
             .catch(error => console.error('Error fetching provinces:', error));
     }, []);
 
-    // Lấy danh sách huyện khi chọn tỉnh
     useEffect(() => {
         if (selectedProvince) {
             axios.get(`https://provinces.open-api.vn/api/p/${selectedProvince}?depth=2`)
@@ -32,7 +31,6 @@ const AddressForm = ({ location, onAddressSubmit }) => {
         }
     }, [selectedProvince]);
 
-    // Lấy danh sách xã khi chọn huyện
     useEffect(() => {
         if (selectedDistrict) {
             axios.get(`https://provinces.open-api.vn/api/d/${selectedDistrict}?depth=2`)
@@ -41,43 +39,47 @@ const AddressForm = ({ location, onAddressSubmit }) => {
         }
     }, [selectedDistrict]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         if (!name || !email || !phone || !selectedProvince || !selectedDistrict || !selectedWard) {
             alert('Vui lòng nhập đầy đủ thông tin.');
             return;
         }
-    
-        // Kết hợp địa chỉ đầy đủ
+
         const fullAddress = `${addressDetails}, ${wards.find(w => w.code === selectedWard)?.name}, ${districts.find(d => d.code === selectedDistrict)?.name}, ${provinces.find(p => p.code === selectedProvince)?.name}`;
-    
-        // Dữ liệu gửi lên server
+
         const formData = {
             name,
             email,
             phone,
             address: fullAddress,
-            cart, // Giỏ hàng
+            cart,
         };
-    
-        // Gửi yêu cầu tạo đơn hàng
-        axios.post('http://localhost:8080/api/orders/create', formData)
-            .then(response => {
-                alert('Đơn hàng đã được gửi thành công!');
-                onAddressSubmit(response.data);
-            })
-            .catch(error => {
-                console.error('Lỗi khi gửi đơn hàng:', error);
-                alert('Có lỗi xảy ra khi gửi đơn hàng. Vui lòng thử lại.');
+
+        try {
+            const response = await axios.post('http://localhost:8080/api/orders/create', formData);
+            const totalAmount = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+            // Điều hướng sang trang PaymentButton
+            history.push({
+                pathname: '/payment',
+                state: {
+                    name,
+                    phone,
+                    cart,
+                    totalAmount,
+                },
             });
+        } catch (error) {
+            console.error('Error creating order:', error);
+            alert('Có lỗi xảy ra khi tạo đơn hàng');
+        }
     };
 
     return (
         <div className="address-form">
             <h2>Nhập thông tin giao hàng</h2>
             <form onSubmit={handleSubmit}>
-                {/* Các input form như đã có */}
                 <div className="form-group">
                     <label htmlFor="name">Họ và tên</label>
                     <input
@@ -175,32 +177,10 @@ const AddressForm = ({ location, onAddressSubmit }) => {
                     />
                 </div>
 
-                <button type="submit" className="submit-button">Xác nhận</button>
+                <button type="submit" className="submit-button">
+                    Xác nhận và Thanh toán
+                </button>
             </form>
-
-            <div className="cart-summary">
-                <h3>Đơn hàng của bạn</h3>
-                {cart.length > 0 ? (
-                    <ul>
-                        {cart.map((item, index) => (
-                            <li key={index} className="cart-item">
-                                <div className="cart-item-image">
-                                    <img
-                                        src={`http://localhost:8080${item.image}`}
-                                        alt={item.name}
-                                        className="cart-item-image"
-                                    />
-                                </div>
-                                <div className="cart-item-details">
-                                    <p>{item.name} x {item.quantity} - {item.price * item.quantity} VNĐ</p>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>Giỏ hàng trống.</p>
-                )}
-            </div>
         </div>
     );
 };

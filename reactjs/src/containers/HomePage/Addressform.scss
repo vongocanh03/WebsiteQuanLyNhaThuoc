@@ -57,7 +57,9 @@
         border-radius: 4px;
         cursor: pointer;
         transition: background-color 0.3s;
-  
+        display: flex; // Đảm bảo nội dung có thể căn giữa
+        align-items: center; // Căn giữa theo trục dọc
+        justify-content: center; // Căn giữa theo trục ngang
         &:hover {
           background-color: #0056b3;
         }
