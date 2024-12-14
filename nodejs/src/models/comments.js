@@ -13,6 +13,16 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: false,
         },
+        rating: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+            validate: {
+                min: 1,
+                max: 5, // Giới hạn từ 1 đến 5 sao
+            },
+        },
+        
     }, {
         tableName: 'comments', // Tên bảng trong cơ sở dữ liệu
         timestamps: true, // Tự động thêm createdAt và updatedAt

@@ -16,6 +16,7 @@ class ProductDetail extends Component {
             quantity: 1,
             comments: [],
             newComment: '',
+            rating: 0, // Thêm state để lưu đánh giá sao
         };
     }
 
@@ -55,6 +56,13 @@ class ProductDetail extends Component {
                 <p>
                     <strong>{comment.user?.lastName || 'Người dùng'}:</strong> {comment.content}
                 </p>
+                <div className="comment-rating">
+                    {Array.from({ length: 5 }).map((_, star) => (
+                        <span key={star} className={`star ${star < comment.rating ? 'selected' : ''}`}>
+                            ★
+                        </span>
+                    ))}
+                </div>
                 <small>{new Date(comment.createdAt).toLocaleString()}</small>
             </div>
         ));
@@ -64,28 +72,39 @@ class ProductDetail extends Component {
     handleCommentChange = (e) => {
         this.setState({ newComment: e.target.value });
     };
+    handleRatingChange = (rating) => {
+        this.setState({ rating });
+    };
 
     handleCommentSubmit = async () => {
         const { id } = this.props.match.params;
         const userId = localStorage.getItem('userId');
-        const { newComment } = this.state;
+        const { newComment, rating } = this.state;
 
         if (!userId) {
-            toast.error('Vui lòng đăng nhập để bình luận.');
+            toast.error('Vui lòng đăng nhập để bình luận.',{ autoClose: 2000 });
+            return;
+        }
+
+        if (!rating) {
+            toast.error('Vui lòng đánh giá cho sản phẩm.',{ autoClose: 2000 });
             return;
         }
 
         try {
-            console.log('Sending comment data:', { productId: id, userId, content: newComment });
-            const response = await addComment({ productId: id, userId, content: newComment });
-            console.log('Response from server:', response);
+            const response = await addComment({
+                productId: id,
+                userId,
+                content: newComment,
+                rating, // Thêm rating vào payload
+            });
 
             toast.success('Đã thêm bình luận!', { autoClose: 2000 });
-            this.setState({ newComment: '' });
+            this.setState({ newComment: '', rating: 0 }); // Reset form
             this.fetchComments(id); // Refresh comments
         } catch (error) {
             console.error('Error adding comment:', error);
-            toast.error('Không thể thêm bình luận.', { autoClose: 2000 });
+            toast.error('Không thể thêm bình luận.');
         }
     };
 
@@ -150,6 +169,14 @@ class ProductDetail extends Component {
         this.handleAddToCart(); // Thêm sản phẩm vào giỏ hàng
         this.props.history.push('/cart'); // Chuyển hướng đến trang giỏ hàng
     };
+    calculateAverageRating = () => {
+        const { comments } = this.state;
+
+        if (!comments || comments.length === 0) return 0; // Không có bình luận
+
+        const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
+        return (totalRating / comments.length).toFixed(1); // Tính trung bình và làm tròn 1 chữ số thập phân
+    };
 
     render() {
         const { newComment, product, error, isExpanded, quantity } = this.state;
@@ -167,7 +194,7 @@ class ProductDetail extends Component {
                 ? product.description.substring(0, 200) + '...'
                 : product.description;
 
-
+        const averageRating = this.calculateAverageRating(); // Tính trung bình sao
         return (
             <div className="product-detail-container">
                 <div className="product-detail">
@@ -186,6 +213,12 @@ class ProductDetail extends Component {
                         </p>
                         <ul className="product-features">
                             <li>Thể loại: {product.category?.name}</li>
+                            <li>
+                                Đánh giá: {averageRating}/5
+                                <span className="rating-stars">
+                                <span className={`star ${averageRating >= 1 ? 'filled' : ''}`}>★</span>
+                                </span>
+                            </li>
                         </ul>
 
                         <div className="product-description">
@@ -260,13 +293,25 @@ class ProductDetail extends Component {
                     </div>
                 </div>
                 <div className="comments-section">
-                    <h3>Bình luận sản phẩm</h3>
+                    <h3>Bình luận sản phẩm:</h3>
                     <div className="comment-form">
                         <textarea
                             value={newComment}
                             onChange={this.handleCommentChange}
                             placeholder="Viết bình luận..."
                         ></textarea>
+                        {/* Chọn đánh giá sao */}
+                        <div className="rating-input">Đánh giá: 
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <span
+                                    key={star}
+                                    className={`star ${star <= this.state.rating ? 'selected' : ''}`}
+                                    onClick={() => this.handleRatingChange(star)}
+                                >
+                                    ★
+                                </span>
+                            ))}
+                        </div>
                         <button onClick={this.handleCommentSubmit}>Gửi bình luận</button>
                     </div>
                     <div className="comments-list">{this.renderComments()}</div>

@@ -12,6 +12,7 @@ const getCommentsByProductId = async (req, res) => {
                     attributes: ['lastName'] // Chỉ lấy lastName của người dùng
                 }
             ],
+            attributes: ['content', 'rating', 'createdAt'], // Hiển thị thêm rating
             order: [['createdAt', 'DESC']], // Sắp xếp theo thời gian tạo
         });
         res.json({ comments });
@@ -23,13 +24,17 @@ const getCommentsByProductId = async (req, res) => {
 
 // POST add new comment
 const addComment = async (req, res) => {
-    const { productId, userId, content } = req.body;
-    console.log('Received:', productId, userId, content); // Kiểm tra dữ liệu nhận được
+    const { productId, userId, content, rating  } = req.body;
+    console.log('Received:', productId, userId, content,rating ); // Kiểm tra dữ liệu nhận được
     try {
+        if (rating < 1 || rating > 5) {
+            return res.status(400).json({ error: 'Rating phải từ 1 đến 5 sao.' });
+        }
         const comment = await Comment.create({
             product_id: productId,
             user_id: userId,
             content,
+            rating,
         });
         res.status(201).json({ comment });
     } catch (error) {
