@@ -1,0 +1,146 @@
+.symptom-form-container {
+    color: #212529;
+    font-family: "Arial", sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 35px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .form-section {
+        text-align: center;
+        margin-bottom: 30px;
+
+        .form-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .form-button {
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+
+            &:hover {
+                background: linear-gradient(90deg, #45a049, #388e3c);
+            }
+        }
+    }
+
+    .product-section {
+        
+        .section-title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            
+
+            .product-card {
+                width: 18%;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 10px;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+                .product-image {
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 4px;
+                    margin-bottom: 10px;
+                }
+
+                .product-details {
+                    padding: 15px;
+
+                    .product-name {
+                        font-size: 18px;
+                        font-weight: bold;
+                        margin-bottom: 5px;
+                    }
+
+                    .product-price {
+                        font-size: 16px;
+                        color: #e91e63;
+                        font-weight: bold;
+                    }
+
+                    .product-category {
+                        color: #777;
+                    }
+                }
+
+                .buy-now-button {
+                    display: block;
+                    margin: 10px auto;
+                    padding: 8px 12px;
+                    background-color: #4CAF50;
+                    color: #fff;
+                    border-radius: 5px;
+                    text-decoration: none;
+                    font-weight: bold;
+
+                    &:hover {
+                        background-color: #388e3c;
+                    }
+                }
+            }
+        }
+    }
+
+    .no-products {
+        text-align: center;
+        color: #888;
+    }
+
+    .error-message {
+        text-align: center;
+        color: red;
+    }
+}
+.form-label {
+    font-size: 16px; // Kích thước chữ dễ đọc
+    font-weight: 600; // Chữ đậm để nổi bật
+    color: #333; // Màu chữ chính
+    margin-bottom: 8px; // Khoảng cách giữa label và input
+    text-transform: capitalize; // Chuyển đổi text thành dạng đầu từ viết hoa
+    letter-spacing: 0.5px; // Giãn cách chữ nhẹ để đẹp mắt
+
+    // Thêm hiệu ứng khi focus vào input liên kết
+    &.focus {
+        color: #007bff; // Màu xanh khi được focus
+    }
+
+    // Responsive thiết bị nhỏ hơn
+    @media (max-width: 576px) {
+        font-size: 14px;
+    }
+}

@@ -25,14 +25,14 @@ class Header extends React.Component {
         if (cartItems && cartItems.length > 0) {
             localStorage.setItem(`cart_${userInfo.id}`, JSON.stringify(cartItems));
         }
-        
+
         // Xóa userId khỏi localStorage
         localStorage.removeItem('userId');
-        
+
         // Thực hiện hành động logout
         this.props.processLogout();
     };
-    
+
     render() {
         let { language, userInfo, isLoggedIn } = this.props;
 
@@ -41,7 +41,7 @@ class Header extends React.Component {
                 <div className="home-header-content">
                     <div className="left-content">
                         <i className="fas fa-bars"></i>
-                        <img className="header-logo" src={logo} alt="Logo" href="#"/>
+                        <img className="header-logo" src={logo} alt="Logo" href="#" />
                     </div>
                     <div className="center-content">
                         <div className="child-content">
@@ -55,24 +55,26 @@ class Header extends React.Component {
                             </div>
                         </div>
                         <div className="child-content">
-                            <div>
-                                <b>
-                                    <FormattedMessage id="homeheader.health-facility" />
-                                </b>
-                            </div>
-                            <div className="subs-title">
-                                <FormattedMessage id="homeheader.select-room" />
-                            </div>
+                            <Link to="/symptom">
+                                <div>
+                                    <b>
+                                        <FormattedMessage id="homeheader.health-facility" />
+                                    </b>
+                                </div>
+                                <div className="subs-title">
+                                    <FormattedMessage id="homeheader.select-room" />
+                                </div>
+                            </Link>
                         </div>
                         <div>
                             <Link to="/support">
-                            <i className="fas fa-question-circle"></i>
-                            <FormattedMessage id="homeheader.support" />
+                                <i className="fas fa-question-circle"></i>
+                                <FormattedMessage id="homeheader.support" />
                             </Link>
                         </div>
                         <div>
                             <Link to="/cart">
-                                <i className="fas fa-shopping-cart"></i> 
+                                <i className="fas fa-shopping-cart"></i>
                                 <FormattedMessage id="homeheader.cart" />
                             </Link>
                         </div>
@@ -96,10 +98,10 @@ class Header extends React.Component {
                         </div>
                         {isLoggedIn ? (
                             <div className="btn btn-logout" onClick={this.handleLogout}>
-                            <i className="fas fa-sign-out-alt"></i>
-                            <FormattedMessage id="homeheader.logout" />
-                        </div>
-                        
+                                <i className="fas fa-sign-out-alt"></i>
+                                <FormattedMessage id="homeheader.logout" />
+                            </div>
+
                         ) : (
                             <div className="btn btn-login" onClick={this.handleLogin}>
                                 <i className="fas fa-sign-in-alt"></i>

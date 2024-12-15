@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { getAllProducts } from '../../services/productService';
 import './ProductList.scss';
 import { Link } from 'react-router-dom';
-
+import { FormattedMessage } from 'react-intl';
 class ProductList extends Component {
     constructor(props) {
         super(props);
@@ -56,7 +56,7 @@ class ProductList extends Component {
 
         return (
             <div className="product-list-container">
-                <div className="title text-center">Danh sách sản phẩm</div>
+                <div className="title text-center"><FormattedMessage id="homeheader.product-list" /></div>
                 <div className="products-list">
                     {currentProducts.length > 0 ? (
                         currentProducts.map((product, index) => (

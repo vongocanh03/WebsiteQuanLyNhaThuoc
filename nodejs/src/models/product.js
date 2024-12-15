@@ -42,6 +42,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'categoryId',
       as: 'category',
     });
+    Product.belongsToMany(models.Symptom, {
+      through: 'ProductSymptoms',
+      as: 'symptoms',
+      foreignKey: 'productId',
+    });
   };
 
   return Product;

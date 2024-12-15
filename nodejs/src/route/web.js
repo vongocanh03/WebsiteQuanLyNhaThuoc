@@ -9,6 +9,7 @@ import cartController from '../controllers/cartController';
 import momoController from '../controllers/momoController';
 import paymentController from '../controllers/paymentController';
 import commentsController from '../controllers/commentsController';
+import symptomController from '../controllers/symptomController';
 let router = express.Router();
 
 let initWebRoutes = (app) => {
@@ -95,7 +96,7 @@ let initWebRoutes = (app) => {
     // API lấy thống kê thanh toán
     router.get('/api/comments/:productId', commentsController.getCommentsByProductId);
 
-
+    router.post('/api/symptoms/suggest', symptomController.suggestProducts);
     return app.use("/", router);
 };
 

@@ -23,6 +23,7 @@ import SupportPage from './HomePage/SupportPage';
 import PaymentButton from './HomePage/PaymentButton';
 import OrdersList from './HomePage/OrderDetail';
 import OrderDetail from './HomePage/OrderDetail';
+import SymptomForm from './HomePage/SymptomFrom';
 
 class App extends Component {
 
@@ -68,6 +69,7 @@ class App extends Component {
                                         <Route path="/payment" component={PaymentButton} />
                                         <Route path="/order-detail" component={OrderDetail} />
                                         <Route path="/support" component={SupportPage } />
+                                        <Route path="/symptom" component={SymptomForm } />
                                     </MainLayout>
                                    
                                 </Switch>

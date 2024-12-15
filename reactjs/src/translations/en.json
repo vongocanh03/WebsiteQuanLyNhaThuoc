@@ -2,8 +2,8 @@
     "homeheader": {
         "speciality": "Medical specialty",
         "searchdoctor": "Find a doctor by specialty",
-        "health-facility": "Health facilities",
-        "select-room": "Choose hospital clinic",
+        "health-facility": "Smart Drug Suggestions",
+        "select-room": "What symptoms are you having?",
         "doctor": "Doctor",
         "select-doctor": "Choose a good doctor",
         "fee": "Checkup package",
@@ -12,7 +12,8 @@
         "welcome": "Welcome ,",
         "logout":"Logout",
         "login":"Login",
-        "cart": "Cart"
+        "cart": "Cart",
+        "product-list":"Product List"
     },
     "banner": {
         "title1": "MEDICAL BACKGROUND",
