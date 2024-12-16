@@ -10,6 +10,7 @@ import momoController from '../controllers/momoController';
 import paymentController from '../controllers/paymentController';
 import commentsController from '../controllers/commentsController';
 import symptomController from '../controllers/symptomController';
+import productsymptomController from '../controllers/productsymptomController';
 let router = express.Router();
 
 let initWebRoutes = (app) => {
@@ -97,6 +98,13 @@ let initWebRoutes = (app) => {
     router.get('/api/comments/:productId', commentsController.getCommentsByProductId);
 
     router.post('/api/symptoms/suggest', symptomController.suggestProducts);
+
+    router.get('/api/symptoms', symptomController.listSymptoms);
+    router.post('/api/symptoms', symptomController.createSymptom);
+    router.put('/api/symptoms/:id', symptomController.updateSymptom);
+    router.delete('/api/symptoms/:id', symptomController.deleteSymptom);
+
+    router.post('/productsymptoms', productsymptomController.createProductsymptom);
     return app.use("/", router);
 };
 

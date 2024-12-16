@@ -59,7 +59,8 @@
                 "user-manage": "Quản lý tài khoản",
                 "product-manage": "Quản lý sản phẩm",
                 "category-manage": "Quản lý danh mục",
-                "support-manage": "Quản lý Hỗ trợ"
+                "support-manage": "Quản lý hỗ trợ",
+                "symptom-manage": "Quản lý gợi ý thuốc"
             },
             "system-parameter": {
                 "header": "Tham số hệ thống"

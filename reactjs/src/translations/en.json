@@ -59,7 +59,9 @@
                 "user-manage": "User manage",
                 "product-manage": "Package manage",
                 "category-manage": "Category manage",
-                "support-manage": "Support manage"
+                "support-manage": "Support manage",
+                "symptom-manage": "Manage medication suggestions"
+              
             },
             "system-parameter": {
                 "header": "System-parameter"
