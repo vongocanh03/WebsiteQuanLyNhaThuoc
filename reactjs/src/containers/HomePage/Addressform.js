@@ -15,7 +15,7 @@ const AddressForm = ({ location }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [cart, setCart] = useState(location?.state?.cart || []);
+    const [cart, setCart] = useState(location?.state?.cart || []);  // Giữ lại giỏ hàng
 
     useEffect(() => {
         axios.get('https://provinces.open-api.vn/api/?depth=1')
@@ -80,6 +80,17 @@ const AddressForm = ({ location }) => {
         <div className="address-form">
             <h2>Nhập thông tin giao hàng</h2>
             <form onSubmit={handleSubmit}>
+            <div className="cart-summary">
+                    <h3>Thông tin giỏ hàng</h3>
+                    <ul>
+                        {cart.map((item, index) => (
+                            <li key={index}>
+                                <p>Sản phẩm: {item.name}</p>
+                                <p>Số lượng: {item.quantity}</p> {/* Hiển thị số lượng */}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
                 <div className="form-group">
                     <label htmlFor="name">Họ và tên</label>
                     <input

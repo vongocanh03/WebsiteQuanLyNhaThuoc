@@ -4,6 +4,7 @@ import HomeHeader from './HomeHeader';
 import ProductList from './ProductList';
 import Banner from './Banner';
 import Foodter from './Foodter';
+import Introduce from './Introduce';
 class HomePage extends Component {
 
     render() {
@@ -13,7 +14,8 @@ class HomePage extends Component {
              <HomeHeader/>   
              <Banner/>
              <ProductList/> 
-            <Foodter/>
+             <Introduce/>
+             <Foodter/>
             </div>  
         );
     }

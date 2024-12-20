@@ -24,6 +24,8 @@ import PaymentButton from './HomePage/PaymentButton';
 import OrdersList from './HomePage/OrderDetail';
 import OrderDetail from './HomePage/OrderDetail';
 import SymptomForm from './HomePage/SymptomFrom';
+import Introduce from './HomePage/Introduce';
+import MedicationForm from './HomePage/MedicationForm';
 
 class App extends Component {
 
@@ -59,7 +61,8 @@ class App extends Component {
                                     <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
                                     <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
                                     <Route path={path.HOMEPAGE} component={HomePage} />
-                                    
+                                    <Route path="/introduce" component={Introduce} />
+                                    <Route path="/medication" component={MedicationForm} />
                                     <MainLayout>
                                         <Route exact path="/" component={ProductList} />
                                         <Route path="/product/:id" component={ProductDetail} />

@@ -1,4 +1,3 @@
-// Header.js
 import React from 'react';
 import { connect } from 'react-redux';
 import './HomeHeader.scss';
@@ -8,8 +7,23 @@ import { LANGUAGES } from '../../utils';
 import { changeLanguageApp } from '../../store/actions';
 import { withRouter, Link } from 'react-router-dom';
 import * as actions from '../../store/actions';
+import Banner from './Banner'; // Import Banner component
 
 class Header extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            darkMode: false,
+            
+        };
+    }
+
+    toggleDarkMode = () => {
+        const { darkMode } = this.state;
+        this.setState({ darkMode: !darkMode });
+        document.body.classList.toggle('dark-mode', !darkMode);
+    };
+
     changeLanguage = (language) => {
         this.props.changeLanguageAppRedux(language);
     };
@@ -19,30 +33,35 @@ class Header extends React.Component {
             this.props.history.push('/login');
         }
     };
+
     handleLogout = () => {
-        // Lưu giỏ hàng vào localStorage trước khi xóa userId
-        const { userInfo, cartItems } = this.props; // Giả sử bạn lưu danh sách sản phẩm trong giỏ hàng vào Redux
+        const { userInfo, cartItems } = this.props;
         if (cartItems && cartItems.length > 0) {
             localStorage.setItem(`cart_${userInfo.id}`, JSON.stringify(cartItems));
         }
 
-        // Xóa userId khỏi localStorage
         localStorage.removeItem('userId');
-
-        // Thực hiện hành động logout
         this.props.processLogout();
     };
 
     render() {
         let { language, userInfo, isLoggedIn } = this.props;
+        const { darkMode } = this.state;
 
         return (
             <div className="home-header-container">
                 <div className="home-header-content">
                     <div className="left-content">
-                        <i className="fas fa-bars"></i>
-                        <img className="header-logo" src={logo} alt="Logo" href="#" />
+                        <Link to="/home">
+                            <i className="fas fa-bars"></i>
+                            <img className="header-logo" src={logo} alt="Logo" href="#" />
+                        </Link>
+                        {/* Icon Dark Mode */}
+                        <div className="dark-mode-icon" onClick={this.toggleDarkMode}>
+                            <i className={`fas ${darkMode ? 'fa-sun' : 'fa-moon'}`} />
+                        </div>
                     </div>
+
                     <div className="center-content">
                         <div className="child-content">
                             <div>
@@ -118,8 +137,7 @@ class Header extends React.Component {
 const mapStateToProps = (state) => ({
     isLoggedIn: state.user.isLoggedIn,
     userInfo: state.user.userInfo,
-    cartItems: state.cart.cartItems // Lấy danh sách sản phẩm từ Redux
-
+    cartItems: state.cart.cartItems
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -12,7 +12,7 @@ exports.saveCart = async (req, res) => {
         // Thêm các sản phẩm vào giỏ hàng
         const items = cartItems.map((item) => ({
             cartId: cart.id,
-            productId: item.productId,
+            productId: item.id,
             name: item.name,
             category: item.category,
             price: item.price,

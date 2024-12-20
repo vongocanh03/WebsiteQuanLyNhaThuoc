@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import './HomeHeader.scss';
 
 class Banner extends React.Component {
+    
     render() {
         return (
             <div className="home-header-banner">

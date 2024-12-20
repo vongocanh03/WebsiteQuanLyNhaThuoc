@@ -27,12 +27,14 @@ const OrderController = {
                 totalAmount,
             });
 
-            // Lưu các sản phẩm trong giỏ hàng (nếu có)
+            // Lưu thông tin sản phẩm trong giỏ hàng vào bảng trung gian
             await Promise.all(cart.map(async (item) => {
                 const product = await Product.findByPk(item.productId);
                 if (product) {
-                    await newOrder.addProduct(product, {
-                        through: { quantity: item.quantity },
+                    await OrderProduct.create({
+                        orderId: newOrder.id,
+                        productId: item.productId,
+                        quantity: item.quantity,
                     });
                 }
             }));

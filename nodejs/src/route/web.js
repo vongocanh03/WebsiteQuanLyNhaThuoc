@@ -11,6 +11,8 @@ import paymentController from '../controllers/paymentController';
 import commentsController from '../controllers/commentsController';
 import symptomController from '../controllers/symptomController';
 import productsymptomController from '../controllers/productsymptomController';
+import searchController from '../controllers/SearchController';
+import medicationController from '../controllers/medicationController';
 let router = express.Router();
 
 let initWebRoutes = (app) => {
@@ -64,11 +66,13 @@ let initWebRoutes = (app) => {
     router.put('/api/update-category', categoryController.handleUpdateCategory); // Cập nhật category
     router.delete('/api/delete-category', categoryController.handleDeleteCategory); // Xóa category
 
+    // Route API order
     router.post('/api/orders/create', orderController.createOrder);
     router.get('/api/orders', orderController.getAllOrders);
     router.get('/api/orders/:id', orderController.getOrderById);
     router.put('/api/orders/:id', orderController.updateOrder);
     router.delete('/api/orders/:id', orderController.deleteOrder);
+
     // Lấy tất cả đơn hàng của người dùng
     router.get('/api/orders/user/:userId', orderController.getOrdersByUser);
 
@@ -79,11 +83,17 @@ let initWebRoutes = (app) => {
 
     // Route lấy tất cả yêu cầu hỗ trợ
     router.get('/api/support', supportController.getAllSupportRequests);
+
     // Cập nhật trạng thái yêu cầu hỗ trợ
     router.put('/api/support/:id', supportController.updateSupportRequestStatus);
+
+
     // Return router middleware
+
     router.post('/api/save', cartController.saveCart);
     router.get('/:userId', cartController.getCartByUser);
+
+
     router.post('/api/momo/pay', momoController.momoPayment);
 
     // API tạo thanh toán
@@ -92,19 +102,20 @@ let initWebRoutes = (app) => {
     // API lấy thống kê thanh toán
     router.get('/payments', paymentController.getPaymentStatistics);
 
+     // API bình luận sản phẩm
     router.post('/api/comment', commentsController.addComment);
-
-    // API lấy thống kê thanh toán
     router.get('/api/comments/:productId', commentsController.getCommentsByProductId);
 
+    // Route API Triệu chứng và gợi ý thuốc thông minh
     router.post('/api/symptoms/suggest', symptomController.suggestProducts);
-
     router.get('/api/symptoms', symptomController.listSymptoms);
     router.post('/api/symptoms', symptomController.createSymptom);
     router.put('/api/symptoms/:id', symptomController.updateSymptom);
     router.delete('/api/symptoms/:id', symptomController.deleteSymptom);
-
     router.post('/productsymptoms', productsymptomController.createProductsymptom);
+    router.get('/api/search', searchController.search);
+    router.post('/api/medication/schedule', medicationController.createSchedule);
+
     return app.use("/", router);
 };
 
